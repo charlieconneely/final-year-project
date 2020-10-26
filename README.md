@@ -1,1 +1,1 @@
-# final-year-project
+# Image Text Recognition and Translation Mobile Application
