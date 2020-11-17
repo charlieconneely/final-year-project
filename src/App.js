@@ -1,10 +1,19 @@
 import './App.css';
-import Canvas from './Canvas/canvas';
+import Canvas from './components/Canvas/canvas';
+import Home from './components/Home/home';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <Canvas />
+    <div>
+      <BrowserRouter>
+        <div className="App">
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/canvas" component={Canvas} />
+          </Switch>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
