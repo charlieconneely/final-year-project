@@ -1,25 +1,50 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
+import rough from 'roughjs/bundled/rough.esm';
 
-const Canvas = (props) => {
-  const canvasRef = useRef(null);
+const generator = rough.generator();
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = window.innerWidth * 0.75;
-    canvas.height = window.innerHeight * 0.75;
+const Canvas = () => {
 
+  useLayoutEffect(() => {
+    const canvas = document.getElementById("canvas");
     const context = canvas.getContext('2d');
-
     context.fillStyle = '#ff7e30';
-    context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
-    /* Outline canvas border */
-    context.strokeStyle = "#000000";
-    context.lineWidth = 5;
-    context.strokeRect(0, 0, context.canvas.width, context.canvas.height);
-  }, []);
+    const rc = rough.canvas(canvas);
+    const rect = generator.rectangle(40, 40, 400, 400);
+    const line = generator.line(50, 50, 200, 200);
+    rc.draw(rect);
+    rc.draw(line);
 
-  return <canvas  ref={canvasRef} {...props}/>
+    rc.rectangle(300, 350, 200, 250, {
+        fill: 'blue',
+        stroke: 'black',
+        hachureAngle: 60,
+        hachureGap: 10,
+        fillWeight: 5,
+        strokeWidth: 5
+    });
+
+    rc.rectangle(500, 350, 200, 250, {
+        fill: 'white',
+        stroke: 'black',
+        hachureAngle: 60,
+        hachureGap: 10,
+        fillWeight: 5,
+        strokeWidth: 5
+    });
+    rc.ellipse(400, 50, 150, 80, {
+      fill: '#ff7e30'
+    });
+  });
+
+  return (
+    <canvas id="canvas"
+          style={{backgroundColor:'grey'}}
+          width={window.innerWidth}
+          height={window.innerHeight}>
+    </canvas>
+  );
 }
 
 export default Canvas;
