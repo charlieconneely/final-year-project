@@ -10,15 +10,17 @@ function createElement(x1, y1, x2, y2) {
 
 class Canvas extends React.Component {
 
+  isDrawing = false;
+  
   constructor(props) {
     super(props);
     this.state = {
       ...this.state,
-      isDrawing: null,
       elements: []
     }
     this.drawOnCanvas = this.drawOnCanvas.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    //this.handleMouseMove = this.handleMousMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
@@ -60,21 +62,34 @@ class Canvas extends React.Component {
   }
 
   handleMouseDown (event) {
+    this.isDrawing = true;
     var {clientX, clientY} = event;
     var element = createElement(clientX, clientY, clientX, clientY);
     this.setState(prevState => ({
       elements: [...(prevState.elements || []), element]
     }));
-    console.log(clientX, clientY);
   }
 
-  /* 
-  to be used to actively draw the line before onMouseUp
-  issue - prevState is not itterable
-  handleMouseMove (event)  
-  */
+  /* to be used to actively draw the line before onMouseUp
+  issue - prevState is not itterable */
+  handleMouseMove (event) {
+    if (!this.isDrawing) return;
+
+    var {clientX, clientY} = event;
+    /* Retrieve x,y coords of last item on elements array */
+    var index = this.state.elements.length - 1;
+    var {x1, y1} = this.state.elements[index];
+    var currentElement = createElement(x1, y1, clientX, clientY);
+    const elementsCopy = [...this.state.elements];
+    elementsCopy[index] = currentElement;
+
+    this.setState(prevState => ({
+      elements: elementsCopy
+    }));
+  }
 
   handleMouseUp (event){
+    this.isDrawing = false;
     var {clientX, clientY} = event;
 
     /* Retrieve x,y coords of last item on elements array */
@@ -94,6 +109,7 @@ class Canvas extends React.Component {
         width={window.innerWidth}
         height={window.innerHeight * 0.75}
         onMouseDown={e => this.handleMouseDown(e)}
+        onMouseMove={e => this.handleMouseMove(e)}
         onMouseUp={e => this.handleMouseUp(e)}>
       </canvas>
     );
