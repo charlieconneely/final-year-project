@@ -20,7 +20,7 @@ class Canvas extends React.Component {
     }
     this.drawOnCanvas = this.drawOnCanvas.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
-    //this.handleMouseMove = this.handleMousMove.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
@@ -28,7 +28,7 @@ class Canvas extends React.Component {
     this.drawOnCanvas();
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevState) {
     if (prevState.elements !== this.state.elements) {
       this.drawOnCanvas();
     }
@@ -48,13 +48,9 @@ class Canvas extends React.Component {
     this.isDrawing = true;
     var {clientX, clientY} = event;
     var element = createElement(clientX, clientY, clientX, clientY);
-    this.setState(prevState => ({
-      elements: [...(prevState.elements || []), element]
-    }));
+    this.defineLineEdges(element);
   }
 
-  /* to be used to actively draw the line before onMouseUp
-  issue - prevState is not itterable */
   handleMouseMove (event) {
     if (!this.isDrawing) return;
 
@@ -66,9 +62,7 @@ class Canvas extends React.Component {
     const elementsCopy = [...this.state.elements];
     elementsCopy[index] = currentElement;
 
-    this.setState(prevState => ({
-      elements: elementsCopy
-    }));
+    this.setState({elements: elementsCopy});
   }
 
   handleMouseUp (event){
@@ -80,23 +74,34 @@ class Canvas extends React.Component {
     var {x1, y1} = this.state.elements[index];
     var currentElement = createElement(x1, y1, clientX, clientY);
 
+    this.defineLineEdges(currentElement);
+  }
+
+  defineLineEdges(element) {
+    console.log(element);
     this.setState(prevState => ({
-      elements: [...(prevState.elements || []), currentElement]
+      elements: [...(prevState.elements || []), element]
     }));
   }
 
   clearCanvas (event) {
     event.preventDefault();
-    this.setState({
-      ...this.state,
-      elements:[]
-    });
+    this.setState({elements:[]});
+  }
+
+  loadNewCanvas(event) {
+    event.preventDefault();
+    var e1 = createElement(365, 166, 695, 66);
+    var e2 = createElement(375, 216, 719, 106);
+
+    this.setState({elements: [...this.state.elements, e1, e2]})
   }
 
   render () {
     return (
       <div>
       <button onClick={e => this.clearCanvas(e)}>Clear</button>
+      <button onClick={e => this.loadNewCanvas(e)}>Load Canvas</button>
       <canvas id="canvas"
         style={{backgroundColor:'grey'}}
         width={window.innerWidth}
