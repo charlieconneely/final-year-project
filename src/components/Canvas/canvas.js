@@ -11,7 +11,7 @@ function createElement(x1, y1, x2, y2) {
 class Canvas extends React.Component {
 
   isDrawing = false;
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -40,23 +40,6 @@ class Canvas extends React.Component {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
     var rc = rough.canvas(canvas);
-
-    var r1 = generator.rectangle(400, 150, 100, 150, {
-      fill: 'blue',
-      hachureAngle: 60,
-      hachureGap: 10,
-      fillWeight: 5
-    });
-
-    var r2 = generator.rectangle(500, 150, 100, 150, {
-      fill: 'white',
-      hachureAngle: 60,
-      hachureGap: 10,
-      fillWeight: 5
-    });
-
-    rc.draw(r1);
-    rc.draw(r2);
 
     this.state.elements.forEach(({roughElement}) => rc.draw(roughElement));
   }
@@ -100,10 +83,20 @@ class Canvas extends React.Component {
     this.setState(prevState => ({
       elements: [...(prevState.elements || []), currentElement]
     }));
-  } 
+  }
+
+  clearCanvas (event) {
+    event.preventDefault();
+    this.setState({
+      ...this.state,
+      elements:[]
+    });
+  }
 
   render () {
     return (
+      <div>
+      <button onClick={e => this.clearCanvas(e)}>Clear</button>
       <canvas id="canvas"
         style={{backgroundColor:'grey'}}
         width={window.innerWidth}
@@ -112,6 +105,7 @@ class Canvas extends React.Component {
         onMouseMove={e => this.handleMouseMove(e)}
         onMouseUp={e => this.handleMouseUp(e)}>
       </canvas>
+      </div>
     );
   }
 }
