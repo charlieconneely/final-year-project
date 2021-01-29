@@ -2,8 +2,15 @@
 
 # dependencies
 /node_modules
+/bower_components
 /.pnp
 .pnp.js
+
+*.sublime*
+
+psd
+thumb
+sketch
 
 # testing
 /coverage
@@ -12,7 +19,11 @@
 /build
 
 # misc
-.DS_Store
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
 .env.local
 .env.development.local
 .env.test.local
