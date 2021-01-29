@@ -1,5 +1,6 @@
 import React from 'react';
 import rough from 'roughjs/bundled/rough.esm';
+import './canvas.css'
 
 const generator = rough.generator();
 
@@ -39,6 +40,9 @@ class Canvas extends React.Component {
     var context = canvas.getContext('2d');
 
     context.clearRect(0, 0, canvas.width, canvas.height);
+    context.lineWidth = 5;
+    context.strokeStyle="black";
+    context.strokeRect(0, 0, canvas.width, canvas.height);
     var rc = rough.canvas(canvas);
 
     this.state.elements.forEach(({roughElement}) => rc.draw(roughElement));
@@ -47,7 +51,7 @@ class Canvas extends React.Component {
   handleMouseDown (event) {
     this.isDrawing = true;
     var {clientX, clientY} = event;
-    var element = createElement(clientX, clientY, clientX, clientY);
+    var element = createElement(clientX-50, clientY, clientX-50, clientY);
     this.defineLineEdges(element);
   }
 
@@ -58,7 +62,7 @@ class Canvas extends React.Component {
     /* Retrieve x,y coords of last item on elements array */
     var index = this.state.elements.length - 1;
     var {x1, y1} = this.state.elements[index];
-    var currentElement = createElement(x1, y1, clientX, clientY);
+    var currentElement = createElement(x1, y1, clientX-50, clientY);
     const elementsCopy = [...this.state.elements];
     elementsCopy[index] = currentElement;
 
@@ -72,7 +76,7 @@ class Canvas extends React.Component {
     /* Retrieve x,y coords of last item on elements array */
     var index = this.state.elements.length - 1;
     var {x1, y1} = this.state.elements[index];
-    var currentElement = createElement(x1, y1, clientX, clientY);
+    var currentElement = createElement(x1, y1, clientX-50, clientY);
 
     this.defineLineEdges(currentElement);
   }
@@ -100,16 +104,19 @@ class Canvas extends React.Component {
   render () {
     return (
       <div>
-      <button onClick={e => this.clearCanvas(e)}>Clear</button>
-      <button onClick={e => this.loadNewCanvas(e)}>Load Canvas</button>
-      <canvas id="canvas"
-        style={{backgroundColor:'grey'}}
-        width={window.innerWidth}
-        height={window.innerHeight * 0.75}
-        onMouseDown={e => this.handleMouseDown(e)}
-        onMouseMove={e => this.handleMouseMove(e)}
-        onMouseUp={e => this.handleMouseUp(e)}>
-      </canvas>
+        <div>
+          <canvas id="canvas"
+            width={window.innerWidth - 100}
+            height={window.innerHeight - 100}
+            onMouseDown={e => this.handleMouseDown(e)}
+            onMouseMove={e => this.handleMouseMove(e)}
+            onMouseUp={e => this.handleMouseUp(e)}>
+          </canvas>
+        </div>
+        <div>
+          <button onClick={e => this.clearCanvas(e)}>Clear</button>
+          <button onClick={e => this.loadNewCanvas(e)}>Load Canvas</button>
+        </div>
       </div>
     );
   }
