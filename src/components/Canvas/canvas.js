@@ -97,7 +97,16 @@ class Canvas extends React.Component {
     }));
   }
 
-  clearCanvas (event) {
+  undo(event) {
+    event.preventDefault();
+    var index = this.state.elements.length - 1;
+    const copy = [...this.state.elements];
+    /* Remove last element from state */
+    copy.splice(index, 1);
+    this.setState({...this.state, elements: copy});
+  }
+
+  clearCanvas(event) {
     event.preventDefault();
     this.setState({elements:[]});
   }
@@ -131,6 +140,7 @@ class Canvas extends React.Component {
           <input type="radio" value="Square" name="Choice"/> Square
         </div>
         <div>
+          <button onClick={e => this.undo(e)}>Undo</button>
           <button onClick={e => this.clearCanvas(e)}>Clear</button>
           <button onClick={e => this.loadNewCanvas(e)}>Load Canvas</button>
         </div>
