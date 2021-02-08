@@ -51,6 +51,7 @@ class Canvas extends React.Component {
   handleMouseDown (event) {
     this.isDrawing = true;
     var {clientX, clientY} = event;
+    console.log(clientX + " " + clientY);
     var element = createElement(clientX-50, clientY, clientX-50, clientY);
     this.defineLineEdges(element);
   }
@@ -82,7 +83,6 @@ class Canvas extends React.Component {
   }
 
   defineLineEdges(element) {
-    console.log(element);
     this.setState(prevState => ({
       elements: [...(prevState.elements || []), element]
     }));
@@ -107,7 +107,7 @@ class Canvas extends React.Component {
         <div>
           <canvas id="canvas"
             width={window.innerWidth - 100}
-            height={window.innerHeight - 100}
+            height={window.innerHeight - 200}
             onMouseDown={e => this.handleMouseDown(e)}
             onMouseMove={e => this.handleMouseMove(e)}
             onMouseUp={e => this.handleMouseUp(e)}>
