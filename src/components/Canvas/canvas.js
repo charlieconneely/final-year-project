@@ -101,6 +101,10 @@ class Canvas extends React.Component {
     this.setState({elements: [...this.state.elements, e1, e2]})
   }
 
+  changeShape(event) {
+    console.log(event.target.value);
+  }
+
   render () {
     return (
       <div>
@@ -112,6 +116,10 @@ class Canvas extends React.Component {
             onMouseMove={e => this.handleMouseMove(e)}
             onMouseUp={e => this.handleMouseUp(e)}>
           </canvas>
+        </div>
+        <div onChange={this.changeShape}>
+          <input type="radio" value="Line" name="Choice" defaultChecked/> Line
+          <input type="radio" value="Square" name="Choice"/> Square
         </div>
         <div>
           <button onClick={e => this.clearCanvas(e)}>Clear</button>
