@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import rough from 'roughjs/bundled/rough.esm';
 import './canvas.css'
 
@@ -120,6 +121,15 @@ class Canvas extends React.Component {
       </div>
     );
   }
+=======
+
+const Canvas = () => {
+  return (
+    <div>
+      <p>Canvas here...</p>
+    </div>
+  );
+>>>>>>> videochat
 }
 
 export default Canvas;
