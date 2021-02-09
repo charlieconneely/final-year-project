@@ -78,16 +78,8 @@ class Canvas extends React.Component {
     this.setState({...this.state, elements: elementsCopy});
   }
 
-  handleMouseUp (event){
+  handleMouseUp (){
     this.isDrawing = false;
-    var {clientX, clientY} = event;
-
-    /* Retrieve x,y coords of last item on elements array */
-    var index = this.state.elements.length - 1;
-    var {x1, y1} = this.state.elements[index];
-    var currentElement = createElement(this.state.shape, x1, y1, clientX-50, clientY);
-
-    this.defineLineEdges(currentElement);
   }
 
   defineLineEdges(element) {
@@ -132,7 +124,7 @@ class Canvas extends React.Component {
             height={window.innerHeight - 200}
             onMouseDown={e => this.handleMouseDown(e)}
             onMouseMove={e => this.handleMouseMove(e)}
-            onMouseUp={e => this.handleMouseUp(e)}>
+            onMouseUp={this.handleMouseUp}>
           </canvas>
         </div>
         <div onChange={e => this.changeShape(e)}>
