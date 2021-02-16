@@ -12,12 +12,11 @@ function createElement(shape, x1, y1, x2, y2) {
   } else {
     roughElement = generator.line(x1, y1, x2, y2)
   }
-
   return {x1, y1, x2, y2, roughElement};
 }
 
 class Canvas extends React.Component {
-
+ 
   isDrawing = false;
 
   constructor(props) {
@@ -25,6 +24,7 @@ class Canvas extends React.Component {
     this.state = {
       ...this.state,
       shape: "Line",
+      textElements: [],
       elements: []
     }
     this.drawOnCanvas = this.drawOnCanvas.bind(this);
@@ -51,15 +51,33 @@ class Canvas extends React.Component {
     context.lineWidth = 5;
     context.strokeStyle="black";
     context.strokeRect(0, 0, canvas.width, canvas.height);
+    context.font = '28px serif';
     var rc = rough.canvas(canvas);
 
-    this.state.elements.forEach(({roughElement}) => rc.draw(roughElement));
+    this.state.elements.forEach(e => {
+      rc.draw(e.roughElement)
+    });
+    this.state.textElements.forEach(e => {
+      context.fillText(e.val, e.xco, e.yco);
+    });
   }
 
   handleMouseDown (event) {
-    this.isDrawing = true;
     var {clientX, clientY} = event;
-    console.log(clientX + " " + clientY);
+
+    /* if text is selected - add textElement obj to state with value from input field*/
+    if (this.state.shape === "Text") {
+      var textInputElement = {
+        type:"Text", 
+        val:document.getElementById('inputText').value,
+        xco:clientX-50, 
+        yco:clientY
+      }
+      this.setState({...this.state, textElements: [...this.state.textElements, textInputElement]})
+      return;
+    } 
+
+    this.isDrawing = true;
     var element = createElement(this.state.shape, clientX-50, clientY, clientX-50, clientY);
     this.defineLineEdges(element);
   }
@@ -130,7 +148,9 @@ class Canvas extends React.Component {
         <div onChange={e => this.changeShape(e)}>
           <input type="radio" value="Line" name="Choice" defaultChecked/> Line
           <input type="radio" value="Square" name="Choice"/> Square
+          <input type="radio" value="Text" name="Choice"/> Text   
         </div>
+        <div>&nbsp; <input type="text" id="inputText" name="inputText"/></div>
         <div>
           <button onClick={e => this.undo(e)}>Undo</button>
           <button onClick={e => this.clearCanvas(e)}>Clear</button>
