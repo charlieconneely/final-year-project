@@ -32,6 +32,13 @@ class Canvas extends React.Component {
     this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
+  componentWillMount() {
+    localStorage.getItem('elements') && this.setState({
+      ...this.state,
+      elements: JSON.parse(localStorage.getItem('elements'))
+    })
+  }
+
   componentDidMount () {
     this.drawOnCanvas();
   }
@@ -40,6 +47,10 @@ class Canvas extends React.Component {
     if (prevState.elements !== this.state.elements) {
       this.drawOnCanvas();
     }
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    localStorage.setItem('elements', JSON.stringify(nextState.elements));
   }
 
   drawOnCanvas() {
@@ -66,7 +77,7 @@ class Canvas extends React.Component {
   handleMouseDown (event) {
     var {clientX, clientY} = event;
 
-    /* if text is selected - add textElement obj to state with value from input field*/
+    /* if text is selected - add textElement obj to state with value from input field */
     if (this.state.shape === "Text") {
       var textInputElement = {
         type:"Text", 
@@ -153,7 +164,11 @@ class Canvas extends React.Component {
           <input type="radio" value="Text" name="Choice"/> Text   
         </div>
         <div>
-          &nbsp; <input placeholder="Enter text here" type="text" id="inputText" name="inputText"/>
+          &nbsp; <input autoComplete="off" 
+                    placeholder="Enter text here"
+                    type="text"
+                    id="inputText"
+                    name="inputText"/>
         </div>
         <div>
           <button onClick={e => this.undo(e)}>Undo</button>
