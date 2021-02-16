@@ -24,7 +24,6 @@ class Canvas extends React.Component {
     this.state = {
       ...this.state,
       shape: "Line",
-      textElements: [],
       elements: []
     }
     this.drawOnCanvas = this.drawOnCanvas.bind(this);
@@ -55,10 +54,12 @@ class Canvas extends React.Component {
     var rc = rough.canvas(canvas);
 
     this.state.elements.forEach(e => {
+      /* check if item is a text element */
+      if (e.hasOwnProperty('type')) {
+        context.fillText(e.val, e.xco, e.yco);
+        return;
+      }
       rc.draw(e.roughElement)
-    });
-    this.state.textElements.forEach(e => {
-      context.fillText(e.val, e.xco, e.yco);
     });
   }
 
@@ -73,7 +74,7 @@ class Canvas extends React.Component {
         xco:clientX-50, 
         yco:clientY
       }
-      this.setState({...this.state, textElements: [...this.state.textElements, textInputElement]})
+      this.setState({...this.state, elements: [...this.state.elements, textInputElement]})
       return;
     } 
 
@@ -150,7 +151,9 @@ class Canvas extends React.Component {
           <input type="radio" value="Square" name="Choice"/> Square
           <input type="radio" value="Text" name="Choice"/> Text   
         </div>
-        <div>&nbsp; <input type="text" id="inputText" name="inputText"/></div>
+        <div>
+          &nbsp; <input placeholder="Enter text here" type="text" id="inputText" name="inputText"/>
+        </div>
         <div>
           <button onClick={e => this.undo(e)}>Undo</button>
           <button onClick={e => this.clearCanvas(e)}>Clear</button>
