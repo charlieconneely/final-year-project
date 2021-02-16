@@ -74,7 +74,10 @@ class Canvas extends React.Component {
         xco:clientX-50, 
         yco:clientY
       }
-      this.setState({...this.state, elements: [...this.state.elements, textInputElement]})
+      this.setState({
+        ...this.state, 
+        elements: [...this.state.elements, textInputElement]
+      })
       return;
     } 
 
@@ -94,7 +97,10 @@ class Canvas extends React.Component {
     const elementsCopy = [...this.state.elements];
     elementsCopy[index] = currentElement;
 
-    this.setState({...this.state, elements: elementsCopy});
+    this.setState({
+      ...this.state, 
+      elements: elementsCopy
+    });
   }
 
   handleMouseUp (){
@@ -122,16 +128,11 @@ class Canvas extends React.Component {
     this.setState({elements:[]});
   }
 
-  loadNewCanvas(event) {
-    event.preventDefault();
-    var e1 = createElement("Line", 365, 166, 695, 66);
-    var e2 = createElement("Line", 375, 216, 719, 106);
-
-    this.setState({...this.state, elements: [...this.state.elements, e1, e2]})
-  }
-
   changeShape = (event) => {
-    this.setState({...this.state, shape: event.target.value});
+    this.setState({
+      ...this.state,
+      shape: event.target.value
+    });
   }
 
   render () {
@@ -157,7 +158,6 @@ class Canvas extends React.Component {
         <div>
           <button onClick={e => this.undo(e)}>Undo</button>
           <button onClick={e => this.clearCanvas(e)}>Clear</button>
-          <button onClick={e => this.loadNewCanvas(e)}>Load Canvas</button>
         </div>
       </div>
     );
