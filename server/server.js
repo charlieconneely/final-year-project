@@ -7,22 +7,22 @@ const { v4: uuidV4 } = require("uuid")
 // Page created by the server (in the '/views' folder)
 // (might change from ejs to JSX/react? or send data to a certain page)
 // https://github.com/reactjs/express-react-views
-//app.set("view engine", "ejs")
+app.set("view engine", "ejs")
 
 // Javascript + css folder
-/*  app.use(express.static("public"))  */
+app.use(express.static("public"))  
 
 //Redirects the user to a dynamically created room (uuid url)
-/*app.get("/", (req, res) => {
+app.get("/", (req, res) => {
     res.redirect(`/${uuidV4()}`)
-})*/
+})
 
 //Renders "room.ejs", redirects the user to it, passing through the "uuid" roomID.
-/*app.get("/:room", (req, res) => {
+app.get("/:room", (req, res) => {
     res.render("room", {
         roomId: req.params.room
     })
-})*/
+})
 
 //Event listener for when user connects to localhost:3000
 io.on("connection", socket => {
