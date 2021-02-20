@@ -1,6 +1,7 @@
-import React, {useState,useEffect, useLayoutEffect} from 'react';
-import rough from 'roughjs/bundled/rough.esm';
-import socketIO from 'socket.io-client';
+import React, {useState,useLayoutEffect} from 'react'
+import rough from 'roughjs/bundled/rough.esm'
+//import socketIO from 'socket.io-client'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import './canvas.css'
 
 const generator = rough.generator();
@@ -20,22 +21,14 @@ function Canvas(props) {
  
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
-  const [elements, setElements] = useState([]) 
+  const [elements, setElements] = useLocalStorage("elements", []) 
 
-  /*componentWillMount() {
-    localStorage.getItem('elements') && setElements(JSON.parse(localStorage.getItem('elements')))
-  }*/
-
-  // componentDidMount
-  useEffect(() => {
-    //localStorage.getItem('elements') && setElements(JSON.parse(localStorage.getItem('elements')))
+  /*useEffect(() => {
     var socket = socketIO('http://localhost:3000/')
     drawOnCanvas()
-  }, [])
+  }, [])*/
 
-  // componentDidUpdate
   useLayoutEffect(() => {
-    //localStorage.setItem('elements', JSON.stringify(elements));
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext('2d');
 
@@ -55,32 +48,6 @@ function Canvas(props) {
       rc.draw(e.roughElement)
     });
   }, [elements])
-
-  /*componentWillUpdate (nextProps, nextState) {
-    localStorage.setItem('elements', JSON.stringify(nextState.elements));
-  }*/
-
-  const drawOnCanvas = () => {
-    //localStorage.setItem('elements', JSON.stringify(elements));
-    var canvas = document.getElementById("canvas");
-    var context = canvas.getContext('2d');
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.lineWidth = 5;
-    context.strokeStyle="black";
-    context.strokeRect(0, 0, canvas.width, canvas.height);
-    context.font = '28px serif';
-    var rc = rough.canvas(canvas);
-
-    elements.forEach(e => {
-      /* check if item is a text element */
-      if (e.hasOwnProperty('type')) {
-        context.fillText(e.val, e.xco, e.yco);
-        return;
-      }
-      rc.draw(e.roughElement)
-    });
-  }
 
   const handleMouseDown = (event) => {
     var {clientX, clientY} = event;
