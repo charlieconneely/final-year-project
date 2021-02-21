@@ -38,6 +38,11 @@ function Canvas(props) {
     socketRef.current.on("message", message => {
       receiveMessage(message)
     })
+
+    socketRef.current.on("canvasState", cState => {
+      //console.log(cState)
+      setElements(cState.body)
+    })
   }, [])
 
   function receiveMessage(msg) {
@@ -54,6 +59,15 @@ function Canvas(props) {
     }
     setMessage('')
     socketRef.current.emit("send message", messageObject)
+  }
+
+  function sendCanvas(e) {
+    e.preventDefault();
+    const canvasObject = {
+      body: elements,
+      id: yourID
+    }
+    socketRef.current.emit("send canvas state", canvasObject)
   }
 
   useLayoutEffect(() => {
@@ -169,7 +183,8 @@ function Canvas(props) {
       </div>
       <div>
         <input name="message" onChange={e=>onMessageChange(e)} value={message} placeholder="Type something..."/>
-        <button onClick={e=>sendMessage(e)}>Send</button>
+        <button onClick={e => sendMessage(e)}>Send</button>
+        <button onClick={e => sendCanvas(e)}>Send State</button>  
       </div>
       <div>
         <button onClick={e => undo(e)}>Undo</button>

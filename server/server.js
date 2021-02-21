@@ -47,6 +47,10 @@ io.on("connection", socket => {
     socket.on("send message", body => {
         io.emit('message', body)
     })
+
+    socket.on("send canvas state", body => {
+        io.emit('canvasState', body)
+    })
 })
 
 //Application hosted on 'localhost:4000'
