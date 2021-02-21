@@ -27,6 +27,9 @@ app.get("/:room", (req, res) => {
     })
 })
 */
+
+//var participants = {};
+
 //Event listener for when user connects to localhost:3000
 io.on("connection", socket => {
     //Pass the roomId and userId when a user joins a room
@@ -41,7 +44,7 @@ io.on("connection", socket => {
             socket.to(roomId).broadcast.emit("user-disconnected", userId)
         })
     })
-
+    
     socket.emit("your id", socket.id)
 
     socket.on("send message", body => {
@@ -51,7 +54,11 @@ io.on("connection", socket => {
     socket.on("send canvas state", body => {
         io.emit('canvasState', body)
     })
+
+    socket.on("take control", userID => {
+        io.emit('control switch', userID)
+    })
 })
 
-//Application hosted on 'localhost:4000'
+// Application hosted on 'localhost:4000'
 server.listen(4000, () => console.log("Listening on port 4000"))

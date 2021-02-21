@@ -1,4 +1,5 @@
 import React, {useState,useLayoutEffect, useEffect, useRef} from 'react'
+import uuid from 'react-uuid'
 import rough from 'roughjs/bundled/rough.esm'
 import io from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -22,34 +23,46 @@ function Canvas(props) {
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
   const [elements, setElements] = useLocalStorage("elements", []) 
-  const [yourID, setYourID] = useState()
+  const [yourID, setYourID] = useLocalStorage('userID', '')
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
+  const [inControl, setControl] = useLocalStorage('inControl', false)
 
   const socketRef = useRef()
 
   useEffect(() => {
+
+    if (yourID === "") {
+      console.log("ID was blank in localstorage")
+      setYourID(uuid)
+    } 
+  
     socketRef.current = io.connect('/')  
 
     socketRef.current.on("your id", id => {
-      setYourID(id)
+      console.log("Socket ID: " + id)
     })
 
     socketRef.current.on("message", message => {
-      receiveMessage(message)
+      setMessages(oldies => [...oldies, message])
+    })
+
+    socketRef.current.on("control switch", id => {
+      if (id === yourID) {
+        setControl(true);
+      } else {
+        setControl(false);
+      }
     })
 
     socketRef.current.on("canvasState", cState => {
-      //console.log(cState)
       setElements(cState.body)
     })
-  }, [])
 
-  function receiveMessage(msg) {
-    setMessages(oldies => [...oldies, msg])
-    console.log(messages)
-    console.log(msg)
-  }
+    socketRef.current.on("user-diconnected", () => {
+      console.log("User disconnected")
+    })
+  }, [])
 
   function sendMessage(e) {
     e.preventDefault();
@@ -68,6 +81,11 @@ function Canvas(props) {
       id: yourID
     }
     socketRef.current.emit("send canvas state", canvasObject)
+  }
+
+  function takeControl(e) {
+    e.preventDefault();
+    socketRef.current.emit("take control", yourID)
   }
 
   useLayoutEffect(() => {
@@ -157,7 +175,7 @@ function Canvas(props) {
   const onMessageChange = (event) => {
     setMessage(event.target.value)
   }
-
+  const controlMessage = inControl ? <h1>You're in control</h1> : <h1>You're not</h1>
   return (
     <div>
       <div>
@@ -168,6 +186,9 @@ function Canvas(props) {
           onMouseMove={e => handleMouseMove(e)}
           onMouseUp={handleMouseUp}>
         </canvas>
+      </div>
+      <div>
+        {controlMessage}
       </div>
       <div onChange={e => changeShape(e)}>
         <input type="radio" value="Line" name="Choice" defaultChecked/> Line
@@ -183,6 +204,7 @@ function Canvas(props) {
       </div>
       <div>
         <input name="message" onChange={e=>onMessageChange(e)} value={message} placeholder="Type something..."/>
+        <button onClick={e => takeControl(e)}>Take Control</button>
         <button onClick={e => sendMessage(e)}>Send</button>
         <button onClick={e => sendCanvas(e)}>Send State</button>  
       </div>
