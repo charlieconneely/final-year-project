@@ -1,5 +1,5 @@
 import React, {useState,useLayoutEffect} from 'react'
-  import rough from 'roughjs/bundled/rough.esm'
+import rough from 'roughjs/bundled/rough.esm'
 //import socketIO from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import './canvas.css'
@@ -51,7 +51,6 @@ function Canvas(props) {
 
   const handleMouseDown = (event) => {
     var {pageX, pageY} = event;
-    console.log("x: " + pageX + " y: " + pageY);
     var xPos = pageX - document.getElementById('canvas').offsetLeft;
     var yPos = pageY - document.getElementById('canvas').offsetTop;
 

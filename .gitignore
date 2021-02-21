@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 
+# Vim 
+*~
+*.swp
+*.swo
+
 *.sublime*
 
 psd
