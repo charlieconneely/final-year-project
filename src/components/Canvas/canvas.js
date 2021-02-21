@@ -1,5 +1,5 @@
 import React, {useState,useLayoutEffect} from 'react'
-import rough from 'roughjs/bundled/rough.esm'
+  import rough from 'roughjs/bundled/rough.esm'
 //import socketIO from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import './canvas.css'
@@ -50,9 +50,10 @@ function Canvas(props) {
   }, [elements])
 
   const handleMouseDown = (event) => {
-    var {clientX, clientY} = event;
-    var xPos = clientX - document.getElementById('canvas').offsetLeft;
-    var yPos = clientY - document.getElementById('canvas').offsetTop;
+    var {pageX, pageY} = event;
+    console.log("x: " + pageX + " y: " + pageY);
+    var xPos = pageX - document.getElementById('canvas').offsetLeft;
+    var yPos = pageY - document.getElementById('canvas').offsetTop;
 
     /* if text is selected - add textElement obj to state with value from input field */
     if (shape === "Text") {
@@ -67,17 +68,17 @@ function Canvas(props) {
     } 
 
     setIsDrawing(true)
-    const element = createElement(shape, xPos, clientY, xPos, yPos);
+    const element = createElement(shape, xPos, pageY, xPos, yPos);
     setElements(prevState => [...prevState, element])
   }
 
   const handleMouseMove =(event) => {
     if (!isDrawing) return;
 
-    var {clientX, clientY} = event;
+    var {pageX, pageY} = event;
     // Account for offset
-    var xPos = clientX - document.getElementById('canvas').offsetLeft;
-    var yPos = clientY - document.getElementById('canvas').offsetTop;
+    var xPos = pageX - document.getElementById('canvas').offsetLeft;
+    var yPos = pageY - document.getElementById('canvas').offsetTop;
     // Retrieve x,y coords of last item on elements array 
     var index = elements.length - 1;
     var {x1, y1} = elements[index];
