@@ -1,17 +1,20 @@
 const express = require("express")
+const http = require("http")
 const app = express()
-const server = require("http").Server(app)
-const io = require("socket.io")(server)
+const server = http.createServer(app)
+const socket = require("socket.io")
+const io = socket(server)
 const { v4: uuidV4 } = require("uuid")
 
 // Page created by the server (in the '/views' folder)
 // (might change from ejs to JSX/react? or send data to a certain page)
 // https://github.com/reactjs/express-react-views
-app.set("view engine", "ejs")
+// app.set("view engine", "ejs")
 
 // Javascript + css folder
-app.use(express.static("public"))  
+// app.use(express.static("public"))  
 
+/*
 //Redirects the user to a dynamically created room (uuid url)
 app.get("/", (req, res) => {
     res.redirect(`/${uuidV4()}`)
@@ -23,7 +26,7 @@ app.get("/:room", (req, res) => {
         roomId: req.params.room
     })
 })
-
+*/
 //Event listener for when user connects to localhost:3000
 io.on("connection", socket => {
     //Pass the roomId and userId when a user joins a room
@@ -39,12 +42,12 @@ io.on("connection", socket => {
         })
     })
 
-    socket.on("canvas-change", ({name, canvas}) => {
-        io.emit(canvas, {name, canvas})
+    socket.emit("your id", socket.id)
+
+    socket.on("send message", body => {
+        io.emit('message', body)
     })
 })
 
-//Application hosted on 'localhost:3000'
-server.listen(3000, function() {
-    console.log("Listening on port 3000")
-})
+//Application hosted on 'localhost:4000'
+server.listen(4000, () => console.log("Listening on port 4000"))

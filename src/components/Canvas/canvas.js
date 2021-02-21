@@ -1,6 +1,6 @@
-import React, {useState,useLayoutEffect} from 'react'
+import React, {useState,useLayoutEffect, useEffect, useRef} from 'react'
 import rough from 'roughjs/bundled/rough.esm'
-//import socketIO from 'socket.io-client'
+import io from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import './canvas.css'
 
@@ -22,11 +22,39 @@ function Canvas(props) {
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
   const [elements, setElements] = useLocalStorage("elements", []) 
+  const [yourID, setYourID] = useState()
+  const [messages, setMessages] = useState([])
+  const [message, setMessage] = useState('')
 
-  /*useEffect(() => {
-    var socket = socketIO('http://localhost:3000/')
-    drawOnCanvas()
-  }, [])*/
+  const socketRef = useRef()
+
+  useEffect(() => {
+    socketRef.current = io.connect('/')  
+
+    socketRef.current.on("your id", id => {
+      setYourID(id)
+    })
+
+    socketRef.current.on("message", message => {
+      receiveMessage(message)
+    })
+  }, [])
+
+  function receiveMessage(msg) {
+    setMessages(oldies => [...oldies, msg])
+    console.log(messages)
+    console.log(msg)
+  }
+
+  function sendMessage(e) {
+    e.preventDefault();
+    const messageObject = {
+      body: message,
+      id: yourID
+    }
+    setMessage('')
+    socketRef.current.emit("send message", messageObject)
+  }
 
   useLayoutEffect(() => {
     var canvas = document.getElementById("canvas"); 
@@ -112,6 +140,10 @@ function Canvas(props) {
     setShape(event.target.value)
   }
 
+  const onMessageChange = (event) => {
+    setMessage(event.target.value)
+  }
+
   return (
     <div>
       <div>
@@ -134,6 +166,10 @@ function Canvas(props) {
                   type="text"
                   id="inputText"
                   name="inputText"/>
+      </div>
+      <div>
+        <input name="message" onChange={e=>onMessageChange(e)} value={message} placeholder="Type something..."/>
+        <button onClick={e=>sendMessage(e)}>Send</button>
       </div>
       <div>
         <button onClick={e => undo(e)}>Undo</button>
