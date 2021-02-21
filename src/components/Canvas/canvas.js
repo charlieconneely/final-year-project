@@ -29,7 +29,7 @@ function Canvas(props) {
   }, [])*/
 
   useLayoutEffect(() => {
-    var canvas = document.getElementById("canvas");
+    var canvas = document.getElementById("canvas"); 
     var context = canvas.getContext('2d');
 
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -51,21 +51,23 @@ function Canvas(props) {
 
   const handleMouseDown = (event) => {
     var {clientX, clientY} = event;
+    var xPos = clientX - document.getElementById('canvas').offsetLeft;
+    var yPos = clientY - document.getElementById('canvas').offsetTop;
 
     /* if text is selected - add textElement obj to state with value from input field */
     if (shape === "Text") {
       var textInputElement = {
         type:"Text", 
         val:document.getElementById('inputText').value,
-        xco:clientX-50, 
-        yco:clientY
+        xco:xPos, 
+        yco:yPos
       }
       setElements(prevState => [...prevState, textInputElement])
       return;
     } 
 
     setIsDrawing(true)
-    const element = createElement(shape, clientX-50, clientY, clientX-50, clientY);
+    const element = createElement(shape, xPos, clientY, xPos, yPos);
     setElements(prevState => [...prevState, element])
   }
 
@@ -73,10 +75,14 @@ function Canvas(props) {
     if (!isDrawing) return;
 
     var {clientX, clientY} = event;
-    /* Retrieve x,y coords of last item on elements array */
+    // Account for offset
+    var xPos = clientX - document.getElementById('canvas').offsetLeft;
+    var yPos = clientY - document.getElementById('canvas').offsetTop;
+    // Retrieve x,y coords of last item on elements array 
     var index = elements.length - 1;
     var {x1, y1} = elements[index];
-    var currentElement = createElement(shape, x1, y1, clientX-50, clientY);
+    
+    var currentElement = createElement(shape, x1, y1, xPos, yPos);
     const elementsCopy = [...elements];
     elementsCopy[index] = currentElement;
 
@@ -91,7 +97,7 @@ function Canvas(props) {
     event.preventDefault()
     var index = elements.length - 1
     const copy = [...elements]
-    /* Remove last element from state */
+    // Remove last element from state 
     copy.splice(index, 1)
     setElements(copy)
   }

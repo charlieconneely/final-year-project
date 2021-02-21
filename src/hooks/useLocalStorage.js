@@ -1,5 +1,7 @@
 import {useState} from 'react'
 
+// Code adapted from https://usehooks.com/useLocalStorage/
+
 function useLocalStorage(key, initialValue) {
     // Pass initial state function to useState so logic is only executed once
     const [storedValue, setStoredValue] = useState(() => {
