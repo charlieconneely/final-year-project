@@ -9,7 +9,7 @@ const generator = rough.generator();
 
 function createElement(shape, x1, y1, x2, y2) {
   var roughElement;
-  
+
   if (shape === "Square") {
     roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1)
   } else {
@@ -19,25 +19,24 @@ function createElement(shape, x1, y1, x2, y2) {
 }
 
 function Canvas(props) {
- 
+
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
-  const [elements, setElements] = useLocalStorage("elements", []) 
+  const [elements, setElements] = useLocalStorage("elements", [])
   const [yourID, setYourID] = useLocalStorage('userID', '')
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
-  const [inControl, setControl] = useLocalStorage('inControl', false)
+  const [inControl, setControl] = useState(false)
 
   const socketRef = useRef()
 
   useEffect(() => {
-
     if (yourID === "") {
       console.log("ID was blank in localstorage")
       setYourID(uuid)
-    } 
-  
-    socketRef.current = io.connect('/')  
+    }
+
+    socketRef.current = io.connect('/')
 
     socketRef.current.on("your id", id => {
       console.log("Socket ID: " + id)
@@ -56,7 +55,7 @@ function Canvas(props) {
     })
 
     socketRef.current.on("canvasState", cState => {
-      setElements(cState.body)
+      if (!inControl) setElements(cState.body);
     })
 
     socketRef.current.on("user-diconnected", () => {
@@ -74,22 +73,17 @@ function Canvas(props) {
     socketRef.current.emit("send message", messageObject)
   }
 
-  function sendCanvas(e) {
+  function switchControl(e) {
     e.preventDefault();
-    const canvasObject = {
-      body: elements,
-      id: yourID
+    if (inControl) {
+      setControl(false)
+      return
     }
-    socketRef.current.emit("send canvas state", canvasObject)
-  }
-
-  function takeControl(e) {
-    e.preventDefault();
     socketRef.current.emit("take control", yourID)
   }
 
   useLayoutEffect(() => {
-    var canvas = document.getElementById("canvas"); 
+    var canvas = document.getElementById("canvas");
     var context = canvas.getContext('2d');
 
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -107,6 +101,11 @@ function Canvas(props) {
       }
       rc.draw(e.roughElement)
     });
+    
+    if (!inControl) {
+      console.log("not in control");
+      return;
+    }
   }, [elements])
 
   const handleMouseDown = (event) => {
@@ -117,14 +116,14 @@ function Canvas(props) {
     /* if text is selected - add textElement obj to state with value from input field */
     if (shape === "Text") {
       var textInputElement = {
-        type:"Text", 
+        type:"Text",
         val:document.getElementById('inputText').value,
-        xco:xPos, 
+        xco:xPos,
         yco:yPos
       }
       setElements(prevState => [...prevState, textInputElement])
       return;
-    } 
+    }
 
     setIsDrawing(true)
     const element = createElement(shape, xPos, pageY, xPos, yPos);
@@ -138,10 +137,10 @@ function Canvas(props) {
     // Account for offset
     var xPos = pageX - document.getElementById('canvas').offsetLeft;
     var yPos = pageY - document.getElementById('canvas').offsetTop;
-    // Retrieve x,y coords of last item on elements array 
+    // Retrieve x,y coords of last item on elements array
     var index = elements.length - 1;
     var {x1, y1} = elements[index];
-    
+
     var currentElement = createElement(shape, x1, y1, xPos, yPos);
     const elementsCopy = [...elements];
     elementsCopy[index] = currentElement;
@@ -151,13 +150,20 @@ function Canvas(props) {
 
   const handleMouseUp = () => {
     setIsDrawing(false)
+    if (!inControl) return;
+    // if in control - send updated elements array across socket
+    const canvasObject = {
+      body: elements,
+      id: yourID
+    }
+    socketRef.current.emit("send canvas state", canvasObject)
   }
 
   const undo = (event) => {
     event.preventDefault()
     var index = elements.length - 1
     const copy = [...elements]
-    // Remove last element from state 
+    // Remove last element from state
     copy.splice(index, 1)
     setElements(copy)
   }
@@ -175,38 +181,40 @@ function Canvas(props) {
   const onMessageChange = (event) => {
     setMessage(event.target.value)
   }
-  const controlMessage = inControl ? <h1>You're in control</h1> : <h1>You're not</h1>
+
+  const controlButtonMessage = inControl ? 'Stop Controlling' : 'Take Control'
+  const canvasTextInput = (shape==="Text") ? 
+    <input autoComplete="off"
+      placeholder="Enter text here"
+      type="text"
+      id="inputText"
+      name="inputText"/> : <p></p>
+
   return (
     <div>
       <div>
         <canvas id="canvas"
           width={window.innerWidth - 100}
           height={window.innerHeight - 200}
-          onMouseDown={e => handleMouseDown(e)} 
+          onMouseDown={e => handleMouseDown(e)}
           onMouseMove={e => handleMouseMove(e)}
           onMouseUp={handleMouseUp}>
         </canvas>
       </div>
       <div>
-        {controlMessage}
+        <button onClick={e => switchControl(e)}>{controlButtonMessage}</button>
       </div>
       <div onChange={e => changeShape(e)}>
         <input type="radio" value="Line" name="Choice" defaultChecked/> Line
         <input type="radio" value="Square" name="Choice"/> Square
-        <input type="radio" value="Text" name="Choice"/> Text   
+        <input type="radio" value="Text" name="Choice"/> Text
       </div>
       <div>
-        &nbsp; <input autoComplete="off" 
-                  placeholder="Enter text here"
-                  type="text"
-                  id="inputText"
-                  name="inputText"/>
+        {canvasTextInput}
       </div>
       <div>
         <input name="message" onChange={e=>onMessageChange(e)} value={message} placeholder="Type something..."/>
-        <button onClick={e => takeControl(e)}>Take Control</button>
         <button onClick={e => sendMessage(e)}>Send</button>
-        <button onClick={e => sendCanvas(e)}>Send State</button>  
       </div>
       <div>
         <button onClick={e => undo(e)}>Undo</button>
