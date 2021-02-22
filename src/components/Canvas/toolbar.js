@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
 import Radio from '@material-ui/core/Radio'
+import TextField from '@material-ui/core/TextField';
 
 function ToolBar(props) {
 
@@ -52,9 +53,8 @@ function ToolBar(props) {
 
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
     const canvasTextInput = (props.propsShape==="Text") ? 
-      <input autoComplete="off"
-        placeholder="Enter text here"
-        type="text"
+      <TextField autoComplete="off"
+        label="Enter text here"
         id="inputText"
         name="inputText"/> : <p></p>
 
