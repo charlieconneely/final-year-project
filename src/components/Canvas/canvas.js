@@ -1,4 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
+import { Button } from '@material-ui/core'
+import Radio from '@material-ui/core/Radio'
 import uuid from 'react-uuid'
 import io from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -106,19 +108,27 @@ function Canvas(props) {
             propsShape={shape} winWidth={windowWidth}/>
       </div>
       <div>
-        <button onClick={e => switchControl(e)}>{controlButtonMessage}</button>
+        <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
       </div>
-      <div onChange={e => changeShape(e)}>
-        <input type="radio" value="Line" name="Choice" defaultChecked/> Line
-        <input type="radio" value="Square" name="Choice"/> Square
-        <input type="radio" value="Text" name="Choice"/> Text
+      <div>
+        <Radio checked={shape==='Line'} name="Choice"
+          onChange={changeShape} value="Line"
+          defaultChecked color="default"
+          />Line 
+        <Radio checked={shape==='Square'} name="Choice" 
+          onChange={changeShape} value="Square"
+          color="default"
+          />Square
+        <Radio checked={shape==='Text'} name="Choice"
+          onChange={changeShape} value="Text" color="default"
+          />Text
       </div>
       <div>
         {canvasTextInput}
       </div>
       <div>
-        <button onClick={e => undo(e)}>Undo</button>
-        <button onClick={e => clearCanvas(e)}>Clear</button>
+        <Button onClick={e => undo(e)}>Undo</Button>
+        <Button color="secondary" onClick={e => clearCanvas(e)}>Clear</Button>
       </div>
     </div>
   );
