@@ -27,6 +27,7 @@ function Canvas(props) {
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
   const [inControl, setControl] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
   const socketRef = useRef()
 
@@ -61,7 +62,17 @@ function Canvas(props) {
     socketRef.current.on("user-diconnected", () => {
       console.log("User disconnected")
     })
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth)
+  }
 
   function sendMessage(e) {
     e.preventDefault();
@@ -106,7 +117,7 @@ function Canvas(props) {
       console.log("not in control");
       return;
     }
-  }, [elements])
+  }, [elements, windowWidth])
 
   const handleMouseDown = (event) => {
     var {pageX, pageY} = event;
