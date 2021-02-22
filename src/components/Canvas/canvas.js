@@ -3,20 +3,8 @@ import uuid from 'react-uuid'
 import rough from 'roughjs/bundled/rough.esm'
 import io from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import shapeGenerator from './shapeGenerator'
 import './canvas.css'
-
-const generator = rough.generator();
-
-function createElement(shape, x1, y1, x2, y2) {
-  var roughElement;
-
-  if (shape === "Square") {
-    roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1)
-  } else {
-    roughElement = generator.line(x1, y1, x2, y2)
-  }
-  return {x1, y1, x2, y2, roughElement};
-}
 
 function Canvas(props) {
 
@@ -102,7 +90,8 @@ function Canvas(props) {
     context.strokeStyle="black";
     context.strokeRect(0, 0, canvas.width, canvas.height);
     context.font = '28px serif';
-    var rc = rough.canvas(canvas);
+    
+    var rc = rough.canvas(canvas)
 
     elements.forEach(e => {
       /* check if item is a text element */
@@ -113,10 +102,6 @@ function Canvas(props) {
       rc.draw(e.roughElement)
     });
     
-    if (!inControl) {
-      console.log("not in control");
-      return;
-    }
   }, [elements, windowWidth])
 
   const handleMouseDown = (event) => {
@@ -137,7 +122,7 @@ function Canvas(props) {
     }
 
     setIsDrawing(true)
-    const element = createElement(shape, xPos, pageY, xPos, yPos);
+    const element = shapeGenerator(shape, xPos, pageY, xPos, yPos);
     setElements(prevState => [...prevState, element])
   }
 
@@ -152,7 +137,7 @@ function Canvas(props) {
     var index = elements.length - 1;
     var {x1, y1} = elements[index];
 
-    var currentElement = createElement(shape, x1, y1, xPos, yPos);
+    var currentElement = shapeGenerator(shape, x1, y1, xPos, yPos);
     const elementsCopy = [...elements];
     elementsCopy[index] = currentElement;
 
