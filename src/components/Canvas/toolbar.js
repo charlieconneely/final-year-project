@@ -6,7 +6,16 @@ function ToolBar(props) {
 
     const clearCanvas = (e) => {
         e.preventDefault()
+        // empty canvas array of elements
         props.setPropsElements([])
+
+        if (!props.propsInControl) return;
+        // send canvas state to peers
+        const canvasObject = {
+            body: [],
+            id: props.id
+          }
+        props.sendCanvasState(canvasObject)
     }
 
     const undo = (e) => {
@@ -15,7 +24,16 @@ function ToolBar(props) {
         const copy = [...props.propsElements]
         // Remove last element from state
         copy.splice(index, 1)
+        // overwrite props array of elements
         props.setPropsElements(copy)
+
+        if (!props.propsInControl) return;
+        // send canvas state to peers
+        const canvasObject = {
+            body: copy,
+            id: props.id
+        }
+        props.sendCanvasState(canvasObject)
     }
 
     const changeShape = (e) => {

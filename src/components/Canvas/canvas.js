@@ -6,7 +6,7 @@ import './canvas.css'
 import DrawingBoard from './drawingBoard'
 import ToolBar from './toolbar'
 
-function Canvas(props) {
+function Canvas() {
 
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
@@ -63,6 +63,7 @@ function Canvas(props) {
 
   // called from DrawingBoard component
   const sendCanvas = (canvasObject) => {
+    if (!inControl) return;
     socketRef.current.emit("send canvas state", canvasObject)
   }
 
@@ -78,7 +79,8 @@ function Canvas(props) {
       <ToolBar propsShape={shape} setPropsShape={setShape}
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
-            switchControl={switchControl}/>
+            switchControl={switchControl} sendCanvasState={sendCanvas}
+            id={yourID}/>
     </div>
   );
 }
