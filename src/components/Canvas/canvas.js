@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { Button } from '@material-ui/core'
-import Radio from '@material-ui/core/Radio'
 import uuid from 'react-uuid'
 import io from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import './canvas.css'
 import DrawingBoard from './drawingBoard'
+import ToolBar from './toolbar'
 
 function Canvas(props) {
 
@@ -57,79 +56,29 @@ function Canvas(props) {
     setWindowWidth(window.innerWidth)
   }
 
-  function switchControl(e) {
-    e.preventDefault();
-    if (inControl) {
-      setControl(false)
-      return
-    }
+  // called from DrawingBoard component
+  const switchControl = () => {   
     socketRef.current.emit("take control", yourID)
   }
 
-  const undo = (event) => {
-    event.preventDefault()
-    var index = elements.length - 1
-    const copy = [...elements]
-    // Remove last element from state
-    copy.splice(index, 1)
-    setElements(copy)
-  }
-
-  const clearCanvas = (event) => {
-    event.preventDefault()
-    setElements([])
-  }
-
-  const changeShape = (event) => {
-    event.preventDefault()
-    setShape(event.target.value)
-  }
-
+  // called from DrawingBoard component
   const sendCanvas = (canvasObject) => {
     socketRef.current.emit("send canvas state", canvasObject)
   }
 
-  const controlButtonMessage = inControl ? 'Stop Controlling' : 'Take Control'
-  const canvasTextInput = (shape==="Text") ? 
-    <input autoComplete="off"
-      placeholder="Enter text here"
-      type="text"
-      id="inputText"
-      name="inputText"/> : <p></p>
-
   return (
     <div>
-      <div>
-        <DrawingBoard sendCanvasState={sendCanvas}
-            propsInControl={inControl}
-            isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
-            id={yourID} 
+      <DrawingBoard sendCanvasState={sendCanvas}
+          propsInControl={inControl}
+          isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
+          id={yourID} 
+          propsElements={elements} setPropsElements={setElements}
+          propsShape={shape} winWidth={windowWidth}/>
+
+      <ToolBar propsShape={shape} setPropsShape={setShape}
             propsElements={elements} setPropsElements={setElements}
-            propsShape={shape} winWidth={windowWidth}/>
-      </div>
-      <div>
-        <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
-      </div>
-      <div>
-        <Radio checked={shape==='Line'} name="Choice"
-          onChange={changeShape} value="Line"
-          defaultChecked color="default"
-          />Line 
-        <Radio checked={shape==='Square'} name="Choice" 
-          onChange={changeShape} value="Square"
-          color="default"
-          />Square
-        <Radio checked={shape==='Text'} name="Choice"
-          onChange={changeShape} value="Text" color="default"
-          />Text
-      </div>
-      <div>
-        {canvasTextInput}
-      </div>
-      <div>
-        <Button onClick={e => undo(e)}>Undo</Button>
-        <Button color="secondary" onClick={e => clearCanvas(e)}>Clear</Button>
-      </div>
+            propsInControl={inControl} setPropsControl={setControl} 
+            switchControl={switchControl}/>
     </div>
   );
 }
