@@ -78,15 +78,20 @@ function DrawingBoard (props) {
         props.sendCanvasState(canvasObject)
     }
 
+    const canvasItem = props.propsInControl ? 
+    <canvas id="canvas"
+      width={window.innerWidth - 100}
+      height={window.innerHeight - 200}
+      onMouseDown={e => handleMouseDown(e)}
+      onMouseMove={e => handleMouseMove(e)}
+      onMouseUp={handleMouseUp}></canvas> : 
+      <canvas id="canvas"
+        width={window.innerWidth - 100}
+        height={window.innerHeight - 200}></canvas>
+
     return (
         <div>
-            <canvas id="canvas"
-                width={window.innerWidth - 100}
-                height={window.innerHeight - 200}
-                onMouseDown={e => handleMouseDown(e)}
-                onMouseMove={e => handleMouseMove(e)}
-                onMouseUp={handleMouseUp}>
-            </canvas>
+            {canvasItem}
         </div>
     )
 }
