@@ -1,8 +1,7 @@
-import React, { useState, useLayoutEffect, useEffect, useRef } from 'react'
-import Peer from "peerjs";
+import React, { useRef } from 'react'
+//import Peer from "peerjs";
 import io from 'socket.io-client'
 import uuid from 'react-uuid'
-import { PureComponent } from 'react';
 
 function VideoChat(props) {
 
@@ -15,24 +14,101 @@ function VideoChat(props) {
   // 4.) Or by using a different Peer system instead of PeerJS
 
   //Defining socket.io
-  const socketRef = useRef()
-  socketRef.current = io.connect('/')
+  //const socketRef = useRef()
+  //socketRef.current = io.connect('/')
 
   // React.createRef() creates access DOM nodes or React elements
-  // that are created within the render method. 
+  // that are created within the render method;
+  // (which is hidden when developing a functional hook instead of a react class component). 
   const localVideo = React.createRef()
   const externalVideo = React.createRef()
+
+  //CHECKING IF THE PAGE IS REFRESHING
+  console.log(uuid())
+
+  // Create an RTCPeerConnection object using a template config file.
+  const peerConnection_config = null
+  const peerConnection = new RTCPeerConnection(peerConnection_config)
+
+  // peerConnection events
+  peerConnection.onicecandidate = (e) => {
+    if (e.candidate){
+      console.log(JSON.stringify(e.candidate))
+    }
+  }
+
+  peerConnection.oniceconnectionstatechange = (e) => {
+    console.log(e)
+  }
+
+  // When a stream has been received, it is assigned to 
+  // the externalVideo's 'React.createRef()' element.
+  peerConnection.ontrack = function(event) {
+    externalVideo.current.srcObject = event.streams[0];
+  };
+
+  // Create an offer. ("Just letting you know, these are my properties.")
+  // If the offer creation is successful, it returns an 'SDP' and
+  // the peerConnection's 'local description' is set to the 'SDP'.
+  // ========================================================================
+  // ('SDP' - Session Description Protocol) 
+  // ('Local Description' - The properties of the local end of the connection.) 
+  const createOffer = () => {
+    console.log("Offer")
+    peerConnection.createOffer({offerToReceiveVideo: 1}).then(sdp => {
+      //Displays the SDP in JSON so we can copy it over to the other peer for testing.
+      console.log(JSON.stringify(sdp))
+      peerConnection.setLocalDescription(sdp)
+    }, e => {})
+  }
+
+  // Set the 'remote description' to 'SDP' in json format
+  // that is located in a textarea element with the ID = "jsonPasteBox" 
+  // ========================================================================
+  // ('Remote Description' - The properties of the remote end of the connection.) 
+  const setRemoteDescription = () => {
+    const desc = JSON.parse(document.getElementById("jsonPasteBox").value)
+    peerConnection.setRemoteDescription(new RTCSessionDescription(desc))
+    console.log("REMOTE DESCRIPTION SET!");
+  }
+
+  // Create an answer. ("Just letting you know, these are my properties.")
+  // If the answer creation is successful, it returns an 'SDP' and
+  // the peerConnection's 'local description' is set to the 'SDP'.
+  // ========================================================================
+  // ('SDP' - Session Description Protocol.) 
+  // ('Local Description' - The properties of the local end of the connection.) 
+  const createAnswer = () => {
+    console.log("Answer")
+    peerConnection.createAnswer({offerToReceiveVideo: 1}).then(sdp => {
+      console.log(JSON.stringify(sdp))
+      peerConnection.setLocalDescription(sdp)
+    }, e => {})
+  }
+
+  // Adds an 'Ice Candidate' to your connection.
+  // It parses JSON in the textarea element with the ID = "jsonPasteBox"
+  // and creates a new connection to an 'Ice Candidate' (peer).
+  // ========================================================================
+  // ('ICE' - Internet Connectivity Establishment.)
+  // ('Ice Candidate' - Describes the protocols and routing needed for WebRTC to be able to communicate with a remote device.) 
+  const addCandidate = () => {
+    const peer = JSON.parse(document.getElementById("jsonPasteBox").value)
+    console.log("Adding peer = ", peer)
+    peerConnection.addIceCandidate(new RTCIceCandidate(peer))
+  }
 
   //Success constant for assigning video streams
   const success = (stream) => {
     window.localStream = stream
     localVideo.current.srcObject = stream;
+    peerConnection.addStream(stream)
     console.log("Permissions: 'Webcam' and 'Microphone' permissions approved.");
   }
 
   //Failure constant if video + audio are not provided by the user.
   const failure = (e) => {
-    console.log("Permissions: Please enable 'Webcam' and 'Microphone' permissions.", e)
+    console.log("Permissions: Please enable 'Webcam' and 'Microphone' permissions.")
   }
 
   // Grabs user media from the browser using promises,
@@ -45,13 +121,11 @@ function VideoChat(props) {
     .then(success)
     .catch(failure)
 
-
   //A new PeerID is created everytime the script is called
   //this could cause potential spamming issues, maybe try find a way
   //to link the peerID to the peer's IP so if they get kicked, they cannot rejoin with a new PeerID.
 
   // console.log("Peer ID = " + peer.id)
-  // const [otherID, setOtherID] = useState("")
   // const [myID, setMyID] = useState("")
   // const peer = new Peer(uuid());
   // const peer = new Peer(myID);
@@ -98,10 +172,24 @@ function VideoChat(props) {
     <div>
       <h2> Video chat component. </h2> 
 
+      <h1>My Video</h1>
       <video ref={localVideo} autoPlay></video> 
+      <h1>Their Video</h1>
       <video ref={externalVideo} autoPlay></video> 
+      
+      <br></br><br></br><br></br>
 
+      <button onClick={createOffer}>OFFER</button>
+      <button onClick={createAnswer}>ANSWER</button>
+      <div>
+        <h2>Please paste Peer SDP or Candidate JSON below.</h2>
+        <textarea id="jsonPasteBox" placeholder="Paste JSON here." input="text"/>
+      </div>
+     
+      <button onClick={setRemoteDescription}>Set Remote Description</button>
+      <button onClick={addCandidate}>Add Peer</button>
 
+      <br></br><br></br><br></br>
 
     </div>
   );
