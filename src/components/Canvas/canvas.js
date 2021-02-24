@@ -2,9 +2,9 @@ import React, {useState, useEffect, useRef} from 'react'
 import uuid from 'react-uuid'
 import io from 'socket.io-client'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import './canvas.css'
 import DrawingBoard from './drawingBoard'
 import ToolBar from './toolbar'
+import './canvas.css' 
 
 function Canvas() {
 

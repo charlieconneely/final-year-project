@@ -7,10 +7,14 @@ function shapeGenerator(shape, x1, y1, x2, y2) {
 
     if (shape === "Square") {
         roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1)
-    } else {
+    }
+    else if (shape === "Circle") {
+        roughElement = generator.circle(x1, y1, (x2 - x1) + (y2 - y1))
+    } 
+    else {
         roughElement = generator.line(x1, y1, x2, y2)
     }
     return {x1, y1, x2, y2, roughElement};
 }
 
-export default shapeGenerator
+export default shapeGenerator   

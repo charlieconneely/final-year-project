@@ -45,7 +45,7 @@ function DrawingBoard (props) {
         }
     
         props.setIsPropsDrawing(true)
-        const element = shapeGenerator(props.propsShape, xPos, pageY, xPos, yPos);
+        const element = shapeGenerator(props.propsShape, xPos, yPos, xPos, yPos);
         props.setPropsElements(prevState => [...prevState, element])
     }
 
@@ -78,13 +78,16 @@ function DrawingBoard (props) {
         props.sendCanvasState(canvasObject)
     }
 
+    // if player is in control - return canvas with event handling 
     const canvasItem = props.propsInControl ? 
     <canvas id="canvas"
       width={window.innerWidth - 100}
       height={window.innerHeight - 200}
       onMouseDown={e => handleMouseDown(e)}
       onMouseMove={e => handleMouseMove(e)}
-      onMouseUp={handleMouseUp}></canvas> : 
+      onMouseUp={handleMouseUp}></canvas> 
+      // else - return non-interactive canvas
+      : 
       <canvas id="canvas"
         width={window.innerWidth - 100}
         height={window.innerHeight - 200}></canvas>

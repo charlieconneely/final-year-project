@@ -72,6 +72,10 @@ function ToolBar(props) {
                 onChange={changeShape} value="Square"
                 color="default"
                 />Square
+                <Radio checked={props.propsShape==='Circle'} name="Choice" 
+                onChange={changeShape} value="Circle"
+                color="default"
+                />Circle
                 <Radio checked={props.propsShape==='Text'} name="Choice"
                 onChange={changeShape} value="Text" color="default"
                 />Text
