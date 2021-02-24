@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Button } from '@material-ui/core'
 import Radio from '@material-ui/core/Radio'
 import TextField from '@material-ui/core/TextField';
+import SelectColour from './selectColour'
 
 function ToolBar(props) {
 
@@ -51,6 +52,11 @@ function ToolBar(props) {
         props.switchControl()
     }
 
+    // called from selectColour.js
+    const setPropsColour = (colour) => {
+        props.setPropsColour(colour)
+    }
+
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
     const canvasTextInput = (props.propsShape==="Text") ? 
       <TextField autoComplete="off"
@@ -64,6 +70,7 @@ function ToolBar(props) {
                 <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
             </div>
             <div>
+                <SelectColour setPropsColour={setPropsColour} />
                 <Radio checked={props.propsShape==='Line'} name="Choice"
                 onChange={changeShape} value="Line"
                 defaultChecked color="default"

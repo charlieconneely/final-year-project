@@ -12,7 +12,7 @@ function DrawingBoard (props) {
         context.lineWidth = 5;
         context.strokeStyle="black";
         context.strokeRect(0, 0, canvas.width, canvas.height);
-        context.font = '28px serif';
+        context.font = '20px serif';
         
         var rc = rough.canvas(canvas)
     
@@ -45,7 +45,7 @@ function DrawingBoard (props) {
         }
     
         props.setIsPropsDrawing(true)
-        const element = shapeGenerator(props.propsShape, xPos, yPos, xPos, yPos);
+        const element = shapeGenerator(props.propsShape, props.propsColour, xPos, yPos, xPos, yPos);
         props.setPropsElements(prevState => [...prevState, element])
     }
 
@@ -60,7 +60,7 @@ function DrawingBoard (props) {
         var index = props.propsElements.length - 1;
         var {x1, y1} = props.propsElements[index];
     
-        var currentElement = shapeGenerator(props.propsShape, x1, y1, xPos, yPos);
+        var currentElement = shapeGenerator(props.propsShape, props.propsColour, x1, y1, xPos, yPos);
         const elementsCopy = [...props.propsElements];
         elementsCopy[index] = currentElement;
     

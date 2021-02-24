@@ -10,6 +10,7 @@ function Canvas() {
 
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
+  const [colour, setColour] = useState("") 
   const [inControl, setControl] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [elements, setElements] = useLocalStorage("elements", [])
@@ -72,11 +73,11 @@ function Canvas() {
       <DrawingBoard sendCanvasState={sendCanvas}
           propsInControl={inControl}
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
-          id={yourID} 
+          id={yourID} propsColour={colour} 
           propsElements={elements} setPropsElements={setElements}
           propsShape={shape} winWidth={windowWidth}/>
 
-      <ToolBar propsShape={shape} setPropsShape={setShape}
+      <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
             switchControl={switchControl} sendCanvasState={sendCanvas}
