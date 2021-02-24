@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { Button } from '@material-ui/core'
 import Radio from '@material-ui/core/Radio'
 import TextField from '@material-ui/core/TextField';
@@ -8,10 +8,9 @@ function ToolBar(props) {
 
     const clearCanvas = (e) => {
         e.preventDefault()
+        if (!props.propsInControl) return;
         // empty canvas array of elements
         props.setPropsElements([])
-
-        if (!props.propsInControl) return;
         // send canvas state to peers
         const canvasObject = {
             body: [],
@@ -22,6 +21,7 @@ function ToolBar(props) {
 
     const undo = (e) => {
         e.preventDefault()
+        if (!props.propsInControl) return;
         var index = props.propsElements.length - 1
         const copy = [...props.propsElements]
         // Remove last element from state
@@ -29,7 +29,6 @@ function ToolBar(props) {
         // overwrite props array of elements
         props.setPropsElements(copy)
 
-        if (!props.propsInControl) return;
         // send canvas state to peers
         const canvasObject = {
             body: copy,
@@ -49,6 +48,7 @@ function ToolBar(props) {
           props.setPropsControl(false)
           return
         }
+        props.setPropsControl(true)
         props.switchControl()
     }
 
@@ -59,10 +59,20 @@ function ToolBar(props) {
 
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
     const canvasTextInput = (props.propsShape==="Text") ? 
-      <TextField autoComplete="off"
+      <div><TextField autoComplete="off"
         label="Enter text here"
         id="inputText"
-        name="inputText"/> : <p></p>
+        name="inputText"/></div> : <div><p></p></div>
+    const UndoClearButtons = props.propsInControl ? 
+        <div>
+            <Button onClick={e => undo(e)}>Undo</Button>
+            <Button color="secondary" onClick={e => clearCanvas(e)}>Clear</Button>
+        </div>
+        :
+        <div>
+            <Button onClick={e => undo(e)} disabled={true}>Undo</Button>
+            <Button color="secondary" onClick={e => clearCanvas(e)} disabled={true}>Clear</Button>
+        </div>
 
     return(
         <div>
@@ -87,13 +97,8 @@ function ToolBar(props) {
                 onChange={changeShape} value="Text" color="default"
                 />Text
             </div>
-            <div>
-                {canvasTextInput}
-            </div>
-            <div>
-                <Button onClick={e => undo(e)}>Undo</Button>
-                <Button color="secondary" onClick={e => clearCanvas(e)}>Clear</Button>
-            </div>
+            {canvasTextInput}
+            {UndoClearButtons}
         </div>
     )
 }
