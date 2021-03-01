@@ -25,7 +25,7 @@ function DrawingBoard (props) {
           rc.draw(e.roughElement)
         });
         
-    }, [props.propsElements, props.winWidth])
+    }, [props.propsElements, props.winWidth]) // potentially don't need the winWidth value here 
 
     const handleMouseDown = (event) => {
         var {pageX, pageY} = event;
