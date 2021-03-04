@@ -64,8 +64,7 @@ function Canvas() {
 
   return (
     <div>
-      <DrawingBoard sendCanvasState={sendCanvas}
-          propsInControl={inControl}
+      <DrawingBoard propsInControl={inControl}
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
           id={yourID} propsColour={colour} 
           propsElements={elements} setPropsElements={setElements}
@@ -74,7 +73,7 @@ function Canvas() {
       <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
-            switchControl={switchControl} sendCanvasState={sendCanvas}
+            switchControl={switchControl} propsSocketRef={socketRef.current}
             id={yourID}/>
     </div>
   );

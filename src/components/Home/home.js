@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div>
       <Canvas/>
-      <VideoChat/> 
+      {/* <VideoChat/>  */}
     </div>
   );
 }

@@ -6,6 +6,10 @@ import SelectColour from './selectColour'
 
 function ToolBar(props) {
 
+    const sendCanvasAcrossPeers = (c) => {
+        props.propsSocketRef.emit("send canvas state", c)
+    }
+
     const clearCanvas = (e) => {
         e.preventDefault()
         if (!props.propsInControl) return;
@@ -16,7 +20,7 @@ function ToolBar(props) {
             body: [],
             id: props.id
           }
-        props.sendCanvasState(canvasObject)
+        sendCanvasAcrossPeers(canvasObject)
     }
 
     const undo = (e) => {
@@ -34,7 +38,7 @@ function ToolBar(props) {
             body: copy,
             id: props.id
         }
-        props.sendCanvasState(canvasObject)
+        sendCanvasAcrossPeers(canvasObject)
     }
 
     const changeShape = (e) => {
@@ -52,27 +56,15 @@ function ToolBar(props) {
         props.switchControl()
     }
 
+    // disable buttons and input fields if not in control
+    const isDisabled = props.propsInControl ? false : true;
+
     // called from selectColour.js
     const setPropsColour = (colour) => {
         props.setPropsColour(colour)
     }
 
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
-    const canvasTextInput = (props.propsShape==="Text") ? 
-      <div><TextField autoComplete="off"
-        label="Enter text here"
-        id="inputText"
-        name="inputText"/></div> : <div><p></p></div>
-    const UndoClearButtons = props.propsInControl ? 
-        <div>
-            <Button onClick={e => undo(e)}>Undo</Button>
-            <Button color="secondary" onClick={e => clearCanvas(e)}>Clear</Button>
-        </div>
-        :
-        <div>
-            <Button onClick={e => undo(e)} disabled={true}>Undo</Button>
-            <Button color="secondary" onClick={e => clearCanvas(e)} disabled={true}>Clear</Button>
-        </div>
 
     return(
         <div>
@@ -97,8 +89,16 @@ function ToolBar(props) {
                 onChange={changeShape} value="Text" color="default"
                 />Text
             </div>
-            {canvasTextInput}
-            {UndoClearButtons}
+            <div>
+                <TextField autoComplete="off"
+                label="Enter text here"
+                id="inputText"
+                name="inputText" disabled={isDisabled}/>
+            </div>
+            <div>
+                <Button onClick={e => undo(e)} disabled={isDisabled}>Undo</Button>
+                <Button color="secondary" onClick={e => clearCanvas(e)} disabled={isDisabled}>Clear</Button>
+            </div>
         </div>
     )
 }
