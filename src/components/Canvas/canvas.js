@@ -11,6 +11,7 @@ function Canvas() {
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
   const [colour, setColour] = useState("") 
+  const [lineWidth, setLineWidth] = useState(1)
   const [inControl, setControl] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [elements, setElements] = useLocalStorage("elements", [])
@@ -66,7 +67,7 @@ function Canvas() {
     <div>
       <DrawingBoard propsInControl={inControl}
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
-          id={yourID} propsColour={colour} 
+          id={yourID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
           propsShape={shape} winWidth={windowWidth} propsSocketRef={socketRef.current} />
 
@@ -74,7 +75,7 @@ function Canvas() {
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
             switchControl={switchControl} propsSocketRef={socketRef.current}
-            id={yourID}/>
+            id={yourID} setPropsLineWidth={setLineWidth}/>
     </div>
   );
 }
