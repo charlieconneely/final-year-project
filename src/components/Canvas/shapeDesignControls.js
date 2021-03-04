@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function SelectColour (props) {
+function DesignControls (props) {
     const [lineWidth, setLineWidth] = useState(1)
     const [colour, setColour] = useState('')
     const classes = useStyles()
@@ -70,4 +70,4 @@ function SelectColour (props) {
     )
 }
 
-export default SelectColour
+export default DesignControls

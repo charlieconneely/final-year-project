@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, TextField, Radio } from '@material-ui/core'
-import SelectColour from './selectColour'
+import DesignControls from './shapeDesignControls'
 import './canvas.css'
 
 function ToolBar(props) {
@@ -18,7 +18,7 @@ function ToolBar(props) {
         const canvasObject = {
             body: [],
             id: props.id
-          }
+        }
         sendCanvasAcrossPeers(canvasObject)
     }
 
@@ -83,7 +83,7 @@ function ToolBar(props) {
                 <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
             </div>
             <div className='row'>
-                <SelectColour setPropsColour={setPropsColour} isDisabled={isDisabled}
+                <DesignControls setPropsColour={setPropsColour} isDisabled={isDisabled}
                      setPropsLineWidth={setPropsLineWidth}/>
             </div>
             <div className='row'>
