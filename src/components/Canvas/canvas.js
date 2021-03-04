@@ -62,12 +62,6 @@ function Canvas() {
     socketRef.current.emit("take control", yourID)
   }
 
-  // called from DrawingBoard component
-  const sendCanvas = (canvasObject) => {
-    if (!inControl) return;
-    socketRef.current.emit("send canvas state", canvasObject)
-  }
-
   return (
     <div>
       <DrawingBoard sendCanvasState={sendCanvas}
@@ -75,7 +69,7 @@ function Canvas() {
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
           id={yourID} propsColour={colour} 
           propsElements={elements} setPropsElements={setElements}
-          propsShape={shape} winWidth={windowWidth}/>
+          propsShape={shape} winWidth={windowWidth} propsSocketRef={socketRef.current} />
 
       <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}

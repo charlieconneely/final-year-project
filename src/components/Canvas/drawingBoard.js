@@ -1,4 +1,4 @@
-import React, {useLayoutEffect} from 'react'
+import React, { useLayoutEffect } from 'react'
 import shapeGenerator from './shapeGenerator'
 import rough from 'roughjs/bundled/rough.esm'
 
@@ -75,8 +75,8 @@ function DrawingBoard (props) {
             body: props.propsElements,
             id: props.id
         }
-        props.sendCanvasState(canvasObject)
-    }
+        props.propsSocketRef.emit("send canvas state", canvasObject)
+    } 
 
     // if player is in control - return canvas with event handling 
     const canvasItem = props.propsInControl ? 

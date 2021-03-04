@@ -4,13 +4,6 @@ const app = express()
 const server = http.createServer(app)
 const socket = require("socket.io")
 const io = socket(server)
-const { v4: uuidV4 } = require("uuid")
-const path = require("path")
-
-// Page created by the server (in the '/views' folder)
-// (might change from ejs to JSX/react? or send data to a certain page)
-// https://github.com/reactjs/express-react-views
-// app.set("view engine", "ejs")
 
 // Javascript + css folder
 app.use(express.static(__dirname + "/build/"))  
@@ -19,8 +12,6 @@ app.use(express.static(__dirname + "/build/"))
 app.get("/", (req, res) => {
     res.redirect("/")
 })
-
-//var participants = {};
 
 //Event listener for when user connects to localhost:3000
 io.on("connection", socket => {
@@ -52,5 +43,4 @@ io.on("connection", socket => {
     })
 })
 
-// Application hosted on 'localhost:4000'
 server.listen(4000, () => console.log("Listening on port 4000"))
