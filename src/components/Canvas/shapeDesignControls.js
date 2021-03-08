@@ -6,7 +6,7 @@ import {FormControl, InputLabel, Select, MenuItem, Typography, Grid, Slider} fro
 function DesignControls (props) {
     const [lineWidth, setLineWidth] = useState(1)
     const [colour, setColour] = useState('')
-    const classes = useStyles()
+    const styles = useStyles()
     
     const handleColourChange = (e) => {
         setColour(e.target.value)
@@ -21,7 +21,7 @@ function DesignControls (props) {
     return (
         <div className='rows'>
             <div className='row'>
-                <Grid className={classes.root}>
+                <Grid className={styles.root}>
                     <Typography  gutterBottom>
                             Line width
                     </Typography>
@@ -32,7 +32,7 @@ function DesignControls (props) {
             </div>
 
             <div className='row'>
-                <FormControl variant="outlined" className={classes.formControl} disabled={props.isDisabled}>
+                <FormControl variant="outlined" className={styles.formControl} disabled={props.isDisabled}>
                     <InputLabel>Colour</InputLabel> 
                     <Select
                     id="colourChoice"

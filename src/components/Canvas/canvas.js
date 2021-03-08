@@ -76,7 +76,8 @@ function Canvas() {
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
             switchControl={switchControl} propsSocketRef={socketRef.current}
-            id={yourID} setPropsLineWidth={setLineWidth} setPropsTextSize={setTextSize}/>
+            id={yourID} setPropsLineWidth={setLineWidth} 
+            propsTextSize={textSize} setPropsTextSize={setTextSize}/>
     </div>
   );
 }

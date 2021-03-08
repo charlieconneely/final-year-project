@@ -1,9 +1,12 @@
 import React from 'react'
-import { Button, TextField, Radio } from '@material-ui/core'
+import { Button, TextField, Radio, Grid, Typography, Slider } from '@material-ui/core'
 import DesignControls from './shapeDesignControls'
+import useStyles from './useStyles'
 import './canvas.css'
 
 function ToolBar(props) {
+    const textWidth = props.propsTextSize
+    const styles = useStyles()
 
     const sendCanvasAcrossPeers = (c) => {
         props.propsSocketRef.emit("send canvas state", c)
@@ -67,14 +70,28 @@ function ToolBar(props) {
         props.setPropsLineWidth(val)
     }
 
+    const handleTextSizeChange = (event, newValue) => {
+        props.setPropsTextSize(newValue)
+    }
+
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
 
     const textInput = (props.propsShape === "Text") ?    
         <div className='row'>
-            &nbsp;<TextField autoComplete="off"
+            &nbsp;
+            <TextField autoComplete="off"
             label="Enter text here"
             id="inputText"
             name="inputText" disabled={isDisabled}/>
+            &nbsp;
+            <Grid className={styles.root}>
+                <Typography  gutterBottom>
+                        Font Size
+                </Typography>
+                <Slider value={textWidth} onChange={handleTextSizeChange}
+                            aria-labelledby="line-slider" disabled={isDisabled}
+                            min={10} max={50}/>
+            </Grid>
         </div>
         : <div className='row'></div>
 

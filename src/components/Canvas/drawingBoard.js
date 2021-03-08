@@ -8,26 +8,24 @@ function DrawingBoard (props) {
   useLayoutEffect(() => {
       var canvas = document.getElementById("canvas");
       var context = canvas.getContext('2d');
-
+      var rc = rough.canvas(canvas)
+      
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.lineWidth = 5;
       context.strokeStyle="black";
       context.strokeRect(0, 0, canvas.width, canvas.height);
-      // get text size from props
-      context.font = props.propsTextSize + 'px serif';
       
-      var rc = rough.canvas(canvas)
-
       props.propsElements.forEach(e => {
         // check if item is a text element 
         if (e.hasOwnProperty('type')) {
+          context.font = e.size + 'px serif';
           context.fillText(e.val, e.xco, e.yco);
           return;
         }
         rc.draw(e.roughElement)
       });
       
-  }, [props.propsElements, props.winWidth]) // potentially don't need the winWidth value here 
+  }, [props.propsElements, props.winWidth]) 
 
   const handleMouseDown = (event) => {
       var {pageX, pageY} = event;
@@ -40,7 +38,8 @@ function DrawingBoard (props) {
           type:"Text",
           val:document.getElementById('inputText').value,
           xco:xPos,
-          yco:yPos
+          yco:yPos,
+          size: props.propsTextSize
         }
         props.setPropsElements(prevState => [...prevState, textInputElement])
         return;
