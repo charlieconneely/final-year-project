@@ -13,12 +13,13 @@ function DrawingBoard (props) {
       context.lineWidth = 5;
       context.strokeStyle="black";
       context.strokeRect(0, 0, canvas.width, canvas.height);
-      context.font = '20px serif';
+      // get text size from props
+      context.font = props.propsTextSize + 'px serif';
       
       var rc = rough.canvas(canvas)
 
       props.propsElements.forEach(e => {
-        /* check if item is a text element */
+        // check if item is a text element 
         if (e.hasOwnProperty('type')) {
           context.fillText(e.val, e.xco, e.yco);
           return;
@@ -33,7 +34,7 @@ function DrawingBoard (props) {
       var xPos = pageX - document.getElementById('canvas').offsetLeft;
       var yPos = pageY - document.getElementById('canvas').offsetTop;
 
-      /* if text is selected - add textElement obj to state with value from input field */
+      // if text is selected - add textElement obj to state with value from input field 
       if (props.propsShape === "Text") {
         var textInputElement = {
           type:"Text",

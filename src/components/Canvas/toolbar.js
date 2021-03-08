@@ -69,13 +69,15 @@ function ToolBar(props) {
 
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
 
-    const textInput = (props.propsShape === "Text") ? 
+    const textInput = (props.propsShape === "Text") ?    
         <div className='row'>
             &nbsp;<TextField autoComplete="off"
             label="Enter text here"
             id="inputText"
             name="inputText" disabled={isDisabled}/>
-        </div> : <div className='row'></div>
+        </div>
+        : <div className='row'></div>
+
 
     return(
         <div className='rows'>

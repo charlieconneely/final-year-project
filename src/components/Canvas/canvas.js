@@ -14,6 +14,7 @@ function Canvas() {
   const [lineWidth, setLineWidth] = useState(1)
   const [inControl, setControl] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [textSize, setTextSize] = useState(20)
   const [elements, setElements] = useLocalStorage("elements", [])
   const [yourID, setYourID] = useLocalStorage('userID', '')
 
@@ -65,7 +66,7 @@ function Canvas() {
 
   return (
     <div>
-      <DrawingBoard propsInControl={inControl}
+      <DrawingBoard propsInControl={inControl} propsTextSize={textSize}
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
           id={yourID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
@@ -75,7 +76,7 @@ function Canvas() {
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
             switchControl={switchControl} propsSocketRef={socketRef.current}
-            id={yourID} setPropsLineWidth={setLineWidth}/>
+            id={yourID} setPropsLineWidth={setLineWidth} setPropsTextSize={setTextSize}/>
     </div>
   );
 }

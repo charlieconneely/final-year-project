@@ -1,20 +1,7 @@
 import React, {useState} from 'react'
 import './canvas.css'
-import {FormControl, InputLabel, Select, MenuItem, 
-        makeStyles, Typography, Grid, Slider} from '@material-ui/core'
-
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-      margin: theme.spacing(5),
-      minWidth: 110,
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    },
-    root: {
-        width: 100,
-    },
-}))
+import useStyles from './useStyles'
+import {FormControl, InputLabel, Select, MenuItem, Typography, Grid, Slider} from '@material-ui/core'
 
 function DesignControls (props) {
     const [lineWidth, setLineWidth] = useState(1)
@@ -35,7 +22,7 @@ function DesignControls (props) {
         <div className='rows'>
             <div className='row'>
                 <Grid className={classes.root}>
-                    <Typography id="line-slider" gutterBottom>
+                    <Typography  gutterBottom>
                             Line width
                     </Typography>
                     <Slider value={lineWidth} onChange={handleLineWidthChange}
