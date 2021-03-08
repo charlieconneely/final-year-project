@@ -1,11 +1,7 @@
 const express = require("express")
-const http = require("http")
 const app = express()
-const server = http.createServer(app)
-const socket = require("socket.io")
-const io = socket(server)
-const { v4: uuidV4 } = require("uuid")
-const path = require("path")
+const io = require("socket.io")({path: "/webrtc"})
+const port = 8080
 
 // Page created by the server (in the '/views' folder)
 // (might change from ejs to JSX/react? or send data to a certain page)
@@ -19,8 +15,6 @@ app.use(express.static(__dirname + "/build/"))
 app.get("/", (req, res) => {
     res.redirect("/")
 })
-
-//var participants = {};
 
 //Event listener for when user connects to localhost:3000
 io.on("connection", socket => {
@@ -51,6 +45,11 @@ io.on("connection", socket => {
         io.emit('control switch', userID)
     })
 })
+// Application hosted on 'localhost:{port}'
+const server = app.listen(port, () => console.log("Listening on port: ", port))
 
-// Application hosted on 'localhost:4000'
-server.listen(4000, () => console.log("Listening on port 4000"))
+//Sockets are listening to the server+port
+io.listen(server)
+
+//Setting the socket transport URL connection for Peers
+const peers = io.of('/webrtcPeer')

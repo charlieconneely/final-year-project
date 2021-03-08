@@ -23,11 +23,29 @@ function VideoChat(props) {
   const localVideo = React.createRef()
   const externalVideo = React.createRef()
 
+  // Transport connection to be established with the server at the temporary namespace;
+  // '/webrtcPeer'.
+  // The path '/webrtc' is the path captured by the serverside
+  const socket = io(
+    '/webrtcPeer',
+    {
+      path: '/webrtc',
+      query: {}
+    }
+  )
+  
   //CHECKING IF THE PAGE IS REFRESHING
   console.log(uuid())
 
-  // Create an RTCPeerConnection object using a template config file.
-  const peerConnection_config = null
+  // Creates an RTCPeerConnection object with a list of TURN/STUN servers 
+  const peerConnection_config = {
+    'iceServers': [
+      { url: 'stun:stun.l.google.com:19302' },
+      { url: 'stun:stun1.l.google.com:19302' },
+      { url: 'stun:stun2.l.google.com:19302' },
+      { url: 'stun:stun3.l.google.com:19302' },
+    ]
+  }
   const peerConnection = new RTCPeerConnection(peerConnection_config)
 
   // peerConnection events
