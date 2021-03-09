@@ -77,6 +77,7 @@ function VideoChat(props) {
   // the externalVideo's 'React.createRef()' element.
   peerConnection.ontrack = function(event) {
     externalVideo.current.srcObject = event.streams[0];
+    console.log("VIDEO SHOULD BE SHOWING")
   };
 
   // Create an offer. ("Just letting you know, these are my properties.")
@@ -89,8 +90,10 @@ function VideoChat(props) {
     console.log("Offer")
     peerConnection.createOffer({offerToReceiveVideo: 1}).then(sdp => {
       //Displays the SDP in JSON so we can copy it over to the other peer for testing.
-      console.log(JSON.stringify(sdp))
+      //console.log(JSON.stringify(sdp))
       peerConnection.setLocalDescription(sdp)
+
+      sendToPeer('offerOrAnswer', sdp)
     }, e => {})
   }
 
@@ -113,8 +116,10 @@ function VideoChat(props) {
   const createAnswer = () => {
     console.log("Answer")
     peerConnection.createAnswer({offerToReceiveVideo: 1}).then(sdp => {
-      console.log(JSON.stringify(sdp))
+      //console.log(JSON.stringify(sdp))
       peerConnection.setLocalDescription(sdp)
+
+      sendToPeer('offerOrAnswer', sdp)
     }, e => {})
   }
 
@@ -130,8 +135,24 @@ function VideoChat(props) {
     peerConnection.addIceCandidate(new RTCIceCandidate(peer))
   }
 
-  //Success constant for assigning video streams
-  const success = (stream) => {
+  // Socket event listeners that activate functions for connection success, 
+  // offerOrAnswer, and adding a candidate.
+  socket.on('connection-success', (success) => {
+    console.log(success)
+  })
+  socket.on('offerOrAnswer', (sdp) => {
+    // Create a notification that comes on screen here
+    // that notifies the user that they are being called.
+    document.getElementById("jsonPasteBox").value = JSON.stringify(sdp)
+    console.log("OFFER OR ANSWER CREATED")
+    peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
+  })
+  socket.on('candidate', (candidate) => {
+    peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+  })
+
+  //Success constant for assigning the local video stream.
+  const mediaSuccess = (stream) => {
     window.localStream = stream
     localVideo.current.srcObject = stream;
     peerConnection.addStream(stream)
@@ -139,7 +160,7 @@ function VideoChat(props) {
   }
 
   //Failure constant if video + audio are not provided by the user.
-  const failure = (e) => {
+  const mediaFailure = (e) => {
     console.log("Permissions: Please enable 'Webcam' and 'Microphone' permissions.")
   }
 
@@ -150,8 +171,8 @@ function VideoChat(props) {
       video: true,
       audio: true
     })
-    .then(success)
-    .catch(failure)
+    .then(mediaSuccess)
+    .catch(mediaFailure)
 
   //A new PeerID is created everytime the script is called
   //this could cause potential spamming issues, maybe try find a way
@@ -218,8 +239,8 @@ function VideoChat(props) {
         <textarea id="jsonPasteBox" placeholder="Paste JSON here." input="text"/>
       </div>
      
-      <button onClick={setRemoteDescription}>Set Remote Description</button>
-      <button onClick={addCandidate}>Add Peer</button>
+      {/* <button onClick={setRemoteDescription}>Set Remote Description</button>
+      <button onClick={addCandidate}>Add Peer</button> */}
 
       <br></br><br></br><br></br>
 
