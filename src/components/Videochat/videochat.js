@@ -48,9 +48,23 @@ function VideoChat(props) {
   }
   const peerConnection = new RTCPeerConnection(peerConnection_config)
 
-  // peerConnection events
+  // Function that emits a socket event,
+  // that takes in a socket identifier and payload,
+  // and send the payload and socketID to the peer.
+  const sendToPeer = (messageType, payload) => {
+    socket.emit(messageType, {
+      socketID: socket.id,
+      payload
+    })
+  }
+
+  // Event handler that specifies a function that happens 
+  // whenever the local ICE agent needs to deliver a message to the other peer
+  // through the signaling server.
+  // It sends local candidate data to anyone who triggers this event.
   peerConnection.onicecandidate = (e) => {
     if (e.candidate){
+      sendToPeer('candidate', e.candidate)
       console.log(JSON.stringify(e.candidate))
     }
   }
