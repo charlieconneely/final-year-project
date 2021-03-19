@@ -18,36 +18,28 @@ function Canvas() {
   const [elements, setElements] = useLocalStorage("elements", [])
   const [yourID, setYourID] = useLocalStorage('userID', '')
 
-  const socketRef = useRef()
-
-  /*const socketRef = io(
+  const socketRef = io(
     '/webrtcPeer',
     {
       path: '/webrtc',
       query: {}
     }
-  ) */ 
+  )  
 
   useEffect(() => {
-    if (yourID === "") {
-      console.log("ID was blank in localstorage")
+    if (yourID === "") {     
       setYourID(uuid)
     }
 
-    //socketRef.current = io.connect('/')
-    socketRef.current = io(
-      '/webrtcPeer',
-      {
-        path: '/webrtc',
-        query: {}
-      }
-    )
-
-    socketRef.current.on("your id", id => {
+    socketRef.on("your id", id => {
       console.log("Socket ID: " + id)
     })
 
-    socketRef.current.on("control switch", id => {
+    socketRef.on("canvasState", cState => {
+      if (!inControl) setElements(cState.body);
+    })
+
+    socketRef.on("control switch", id => {   
       if (id === yourID) {
         setControl(true);
       } else {
@@ -55,11 +47,7 @@ function Canvas() {
       }
     })
 
-    socketRef.current.on("canvasState", cState => {
-      if (!inControl) setElements(cState.body);
-    })
-
-    socketRef.current.on("user-diconnected", () => {
+    socketRef.on("user-diconnected", () => {
       console.log("User disconnected")
     })
 
@@ -74,9 +62,13 @@ function Canvas() {
     setWindowWidth(window.innerWidth)
   }
 
-  // called from DrawingBoard component
+  // called from toolBar component
   const switchControl = () => {   
-    socketRef.current.emit("take control", yourID)
+    socketRef.emit("take control", yourID)
+  }
+
+  const sendCanvas = (c) => {
+    socketRef.emit("send canvas state", c);
   }
 
   return (
@@ -85,12 +77,12 @@ function Canvas() {
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
           id={yourID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
-          propsShape={shape} winWidth={windowWidth} propsSocketRef={socketRef.current} />
+          propsShape={shape} winWidth={windowWidth} propsSocketRef={socketRef} />
 
       <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
-            switchControl={switchControl} propsSocketRef={socketRef.current}
+            switchControl={switchControl} propsSendCanvas={sendCanvas}
             id={yourID} setPropsLineWidth={setLineWidth} 
             propsTextSize={textSize} setPropsTextSize={setTextSize}/>
     </div>

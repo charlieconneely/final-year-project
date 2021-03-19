@@ -9,7 +9,7 @@ function ToolBar(props) {
     const styles = useStyles()
 
     const sendCanvasAcrossPeers = (c) => {
-        props.propsSocketRef.emit("send canvas state", c)
+        props.propsSendCanvas(c);
     }
 
     const clearCanvas = (e) => {

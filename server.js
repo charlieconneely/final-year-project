@@ -68,19 +68,13 @@ peers.on('connection', (socket) => {
         peerConnections.delete(socket.id)
     })
 
-    // Canvas section
     socket.emit("your id", socket.id)
 
-    socket.on("send message", body => {
-        io.emit('message', body)
-    })
-
     socket.on("send canvas state", body => {
-        io.emit('canvasState', body)
+        peers.emit('canvasState', body)
     })
 
     socket.on("take control", userID => {
-        io.emit('control switch', userID)
+        peers.emit('control switch', userID)
     })
-
 })
