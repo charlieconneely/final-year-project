@@ -20,13 +20,28 @@ function Canvas() {
 
   const socketRef = useRef()
 
+  /*const socketRef = io(
+    '/webrtcPeer',
+    {
+      path: '/webrtc',
+      query: {}
+    }
+  ) */ 
+
   useEffect(() => {
     if (yourID === "") {
       console.log("ID was blank in localstorage")
       setYourID(uuid)
     }
 
-    socketRef.current = io.connect('/')
+    //socketRef.current = io.connect('/')
+    socketRef.current = io(
+      '/webrtcPeer',
+      {
+        path: '/webrtc',
+        query: {}
+      }
+    )
 
     socketRef.current.on("your id", id => {
       console.log("Socket ID: " + id)
