@@ -18,36 +18,32 @@ function Canvas() {
   const [elements, setElements] = useLocalStorage("elements", [])
   const [yourID, setYourID] = useLocalStorage('userID', '')
 
-  const socketRef = io(
-    '/webrtcPeer',
-    {
-      path: '/webrtc',
-      query: {}
-    }
-  )  
+  const socketRef = useRef()
 
   useEffect(() => {
     if (yourID === "") {     
       setYourID(uuid)
     }
 
-    socketRef.on("your id", id => {
-      console.log("Socket ID: " + id)
-    })
+    socketRef.current = io.connect("/")
 
-    socketRef.on("canvasState", cState => {
+    socketRef.current.on("your id", id => {
+      console.log("The Socket ID: " + id)
+    })
+  
+    socketRef.current.on("canvasState", cState => {
       if (!inControl) setElements(cState.body);
     })
-
-    socketRef.on("control switch", id => {   
+  
+    socketRef.current.on("control switch", id => {   
       if (id === yourID) {
         setControl(true);
       } else {
         setControl(false);
       }
     })
-
-    socketRef.on("user-diconnected", () => {
+  
+    socketRef.current.on("user-diconnected", () => {
       console.log("User disconnected")
     })
 
@@ -64,11 +60,11 @@ function Canvas() {
 
   // called from toolBar component
   const switchControl = () => {   
-    socketRef.emit("take control", yourID)
+    socketRef.current.emit("take control", yourID)
   }
 
   const sendCanvas = (c) => {
-    socketRef.emit("send canvas state", c);
+    socketRef.current.emit("send canvas state", c);
   }
 
   return (
@@ -77,7 +73,7 @@ function Canvas() {
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
           id={yourID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
-          propsShape={shape} winWidth={windowWidth} propsSocketRef={socketRef} />
+          propsShape={shape} winWidth={windowWidth} propsSendCanvas={sendCanvas} />
 
       <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}

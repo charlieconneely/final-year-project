@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import uuid from 'react-uuid'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 function VideoChat(props) {
 
@@ -9,20 +10,28 @@ function VideoChat(props) {
   // (which is hidden when developing a functional hook instead of a react class component). 
   const localVideo = React.createRef()
   const externalVideo = React.createRef()
+  const socket = useRef()
 
-  // Transport connection to be established with the server at the temporary namespace;
-  // '/webrtcPeer'.
-  // The path '/webrtc' is the path captured by the serverside
-  const socket = io(
-    '/webrtcPeer',
-    {
-      path: '/webrtc',
-      query: {}
-    }
-  )
-  
-  //CHECKING IF THE PAGE IS REFRESHING
-  console.log(uuid())
+  useEffect(() => {
+
+    socket.current = io.connect("/")
+
+    // Socket event listeners that activate functions for connection success, 
+    // offerOrAnswer, and adding a candidate.
+    socket.current.on('connection-success', (success) => {
+      console.log(success)
+    })
+    socket.current.on('offerOrAnswer', (sdp) => {
+      // Create a notification that comes on screen here
+      // that notifies the user that they are being called.
+      document.getElementById("jsonPasteBox").value = JSON.stringify(sdp)
+      console.log("OFFER OR ANSWER CREATED")
+      peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
+    })
+    socket.current.on('candidate', (candidate) => {
+      peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+    })
+  }, [])
 
   // Creates an RTCPeerConnection object with a list of TURN/STUN servers 
   const peerConnection_config = {
@@ -39,8 +48,8 @@ function VideoChat(props) {
   // that takes in a socket identifier and payload,
   // and send the payload and socketID to the peer.
   const sendToPeer = (messageType, payload) => {
-    socket.emit(messageType, {
-      socketID: socket.id,
+    socket.current.emit(messageType, {
+      socketID: socket.current.id,    
       payload
     })
   }
@@ -99,22 +108,6 @@ function VideoChat(props) {
       sendToPeer('offerOrAnswer', sdp)
     }, e => {})
   }
-
-  // Socket event listeners that activate functions for connection success, 
-  // offerOrAnswer, and adding a candidate.
-  socket.on('connection-success', (success) => {
-    console.log(success)
-  })
-  socket.on('offerOrAnswer', (sdp) => {
-    // Create a notification that comes on screen here
-    // that notifies the user that they are being called.
-    document.getElementById("jsonPasteBox").value = JSON.stringify(sdp)
-    console.log("OFFER OR ANSWER CREATED")
-    peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
-  })
-  socket.on('candidate', (candidate) => {
-    peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
-  })
 
   //Success constant for assigning the local video stream.
   const mediaSuccess = (stream) => {

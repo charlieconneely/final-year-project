@@ -55,7 +55,8 @@ function ToolBar(props) {
           return
         }
         props.setPropsControl(true)
-        props.switchControl()
+        // socket.io function
+        props.switchControl() 
     }
 
     // disable buttons and input fields if not in control

@@ -76,7 +76,7 @@ function DrawingBoard (props) {
           body: props.propsElements,
           id: props.id
       }
-      props.propsSocketRef.emit("send canvas state", canvasObject)
+      props.propsSendCanvas(canvasObject)
   } 
 
   // if player is in control - return canvas with event handling 

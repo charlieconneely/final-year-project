@@ -1,6 +1,9 @@
 const express = require("express")
+const http = require("http")
 const app = express()
-const io = require("socket.io")({path: "/webrtc"})
+const server = http.createServer(app)
+const socket = require("socket.io")
+const io = socket(server) 
 const port = 3000
 
 // Page created by the server (in the '/views' folder)
@@ -16,20 +19,17 @@ app.get('/', (req, res, next) => {
     res.sendFile(__dirname + '/build/index.html')
 })
 
-// Application hosted on 'localhost:{port}'
-const server = app.listen(port, () => console.log("Listening on port: ", port))
-
 //Sockets are listening to the server+port
-io.listen(server)
+//socket.listen(server)
 
 //Setting the socket transport URL connection for Peers
-const peers = io.of('/webrtcPeer')
+//const peers = io.of('/webrtcPeer')
 
 //List of all Peer connections to sockets
 let peerConnections = new Map()
 
 //Event listeners for when peers connect to the server URL.
-peers.on('connection', (socket) => {
+io.on('connection', (socket) => {
     // Emits a event called 'connection-success' along with the user's socket id.
     // A peer is added to the map, with a socket ID as the key, and the socket as a value.
     console.log("VIDEO SIDE OF THINGS:",socket.id);
@@ -43,7 +43,7 @@ peers.on('connection', (socket) => {
         for (const [socketID, socket] of peerConnections.entries()){
             if (socketID !== data.socketID){
                 console.log(socketID, data.payload.type)
-                socket.emit('offerOrAnswer', data.payload)
+                socket.emit('offerOrAnswer', data.payload) // switch to io + include uuid in emit
             }
         }
     })
@@ -71,10 +71,13 @@ peers.on('connection', (socket) => {
     socket.emit("your id", socket.id)
 
     socket.on("send canvas state", body => {
-        peers.emit('canvasState', body)
+        io.emit('canvasState', body)
     })
 
     socket.on("take control", userID => {
-        peers.emit('control switch', userID)
+        io.emit('control switch', userID)
     })
 })
+
+// Application hosted on 'localhost:{port}'
+server.listen(port, () => console.log("Listening on port: ", port))
