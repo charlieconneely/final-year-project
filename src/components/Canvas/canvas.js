@@ -11,8 +11,10 @@ function Canvas() {
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
   const [colour, setColour] = useState("") 
+  const [lineWidth, setLineWidth] = useState(1)
   const [inControl, setControl] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [textSize, setTextSize] = useState(20)
   const [elements, setElements] = useLocalStorage("elements", [])
   const [yourID, setYourID] = useLocalStorage('userID', '')
 
@@ -64,18 +66,18 @@ function Canvas() {
 
   return (
     <div>
-      <DrawingBoard sendCanvasState={sendCanvas}
-          propsInControl={inControl}
+      <DrawingBoard propsInControl={inControl} propsTextSize={textSize}
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
-          id={yourID} propsColour={colour} 
+          id={yourID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
           propsShape={shape} winWidth={windowWidth} propsSocketRef={socketRef.current} />
 
       <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
-            switchControl={switchControl} sendCanvasState={sendCanvas}
-            id={yourID}/>
+            switchControl={switchControl} propsSocketRef={socketRef.current}
+            id={yourID} setPropsLineWidth={setLineWidth} 
+            propsTextSize={textSize} setPropsTextSize={setTextSize}/>
     </div>
   );
 }

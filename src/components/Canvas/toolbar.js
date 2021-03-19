@@ -1,10 +1,16 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
-import Radio from '@material-ui/core/Radio'
-import TextField from '@material-ui/core/TextField';
-import SelectColour from './selectColour'
+import { Button, TextField, Radio, Grid, Typography, Slider } from '@material-ui/core'
+import DesignControls from './shapeDesignControls'
+import useStyles from './useStyles'
+import './canvas.css'
 
 function ToolBar(props) {
+    const textWidth = props.propsTextSize
+    const styles = useStyles()
+
+    const sendCanvasAcrossPeers = (c) => {
+        props.propsSocketRef.emit("send canvas state", c)
+    }
 
     const clearCanvas = (e) => {
         e.preventDefault()
@@ -15,8 +21,8 @@ function ToolBar(props) {
         const canvasObject = {
             body: [],
             id: props.id
-          }
-        props.sendCanvasState(canvasObject)
+        }
+        sendCanvasAcrossPeers(canvasObject)
     }
 
     const undo = (e) => {
@@ -34,7 +40,7 @@ function ToolBar(props) {
             body: copy,
             id: props.id
         }
-        props.sendCanvasState(canvasObject)
+        sendCanvasAcrossPeers(canvasObject)
     }
 
     const changeShape = (e) => {
@@ -52,53 +58,76 @@ function ToolBar(props) {
         props.switchControl()
     }
 
+    // disable buttons and input fields if not in control
+    const isDisabled = !props.propsInControl 
+
     // called from selectColour.js
     const setPropsColour = (colour) => {
         props.setPropsColour(colour)
     }
 
+    const setPropsLineWidth = (val) => {
+        props.setPropsLineWidth(val)
+    }
+
+    const handleTextSizeChange = (event, newValue) => {
+        props.setPropsTextSize(newValue)
+    }
+
     const controlButtonMessage = props.propsInControl ? 'Stop Controlling' : 'Take Control'
-    const canvasTextInput = (props.propsShape==="Text") ? 
-      <div><TextField autoComplete="off"
-        label="Enter text here"
-        id="inputText"
-        name="inputText"/></div> : <div><p></p></div>
-    const UndoClearButtons = props.propsInControl ? 
-        <div>
-            <Button onClick={e => undo(e)}>Undo</Button>
-            <Button color="secondary" onClick={e => clearCanvas(e)}>Clear</Button>
+
+    const textInput = (props.propsShape === "Text") ?    
+        <div className='row'>
+            &nbsp;
+            <TextField autoComplete="off"
+            label="Enter text here"
+            id="inputText"
+            name="inputText" disabled={isDisabled}/>
+            &nbsp;
+            <Grid className={styles.root}>
+                <Typography  gutterBottom>
+                        Font Size
+                </Typography>
+                <Slider value={textWidth} onChange={handleTextSizeChange}
+                            aria-labelledby="line-slider" disabled={isDisabled}
+                            min={10} max={50}/>
+            </Grid>
         </div>
-        :
-        <div>
-            <Button onClick={e => undo(e)} disabled={true}>Undo</Button>
-            <Button color="secondary" onClick={e => clearCanvas(e)} disabled={true}>Clear</Button>
-        </div>
+        : <div className='row'></div>
+
 
     return(
-        <div>
+        <div className='rows'>
             <div>
                 <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
             </div>
-            <div>
-                <SelectColour setPropsColour={setPropsColour} />
+            <div className='row'>
+                <DesignControls setPropsColour={setPropsColour} isDisabled={isDisabled}
+                     setPropsLineWidth={setPropsLineWidth}/>
+            </div>
+            <div className='row'>
                 <Radio checked={props.propsShape==='Line'} name="Choice"
                 onChange={changeShape} value="Line"
-                defaultChecked color="default"
-                />Line 
+                defaultChecked disabled={isDisabled} color="default"
+                />Line &nbsp;
                 <Radio checked={props.propsShape==='Square'} name="Choice" 
                 onChange={changeShape} value="Square"
-                color="default"
-                />Square
+                color="default" disabled={isDisabled}
+                />Square &nbsp;
                 <Radio checked={props.propsShape==='Circle'} name="Choice" 
                 onChange={changeShape} value="Circle"
-                color="default"
-                />Circle
+                color="default" disabled={isDisabled}
+                />Circle &nbsp;
                 <Radio checked={props.propsShape==='Text'} name="Choice"
                 onChange={changeShape} value="Text" color="default"
-                />Text
+                disabled={isDisabled}
+                />Text &nbsp;
             </div>
-            {canvasTextInput}
-            {UndoClearButtons}
+            {textInput}
+            <div>
+                <Button onClick={e => undo(e)} disabled={isDisabled}>Undo</Button>
+                <Button color="secondary" onClick={e => clearCanvas(e)} disabled={isDisabled}>Clear</Button>
+            </div>
         </div>
     )
 }
