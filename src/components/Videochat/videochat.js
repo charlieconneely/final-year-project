@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import io from 'socket.io-client'
-import uuid from 'react-uuid'
-import useLocalStorage from '../../hooks/useLocalStorage'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid';
 
 function VideoChat(props) {
 
@@ -24,7 +24,7 @@ function VideoChat(props) {
     socket.current.on('offerOrAnswer', (sdp) => {
       // Create a notification that comes on screen here
       // that notifies the user that they are being called.
-      document.getElementById("jsonPasteBox").value = JSON.stringify(sdp)
+      document.getElementById("callNotification").textContent = "You are being called! Click answer to accept."
       console.log("OFFER OR ANSWER CREATED")
       peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
     })
@@ -134,23 +134,22 @@ function VideoChat(props) {
 
   return ( 
     <div>
-      <h2> Video chat component. </h2> 
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <h1>My vid</h1>
+          <video ref={localVideo} autoPlay></video> 
+        </Grid>
+        <Grid item xs={6}>
+          <h1>Their vid</h1>
+          <video ref={externalVideo} autoPlay></video> 
+        </Grid>
+      </Grid>
 
-      <h1>My Video</h1>
-      <video ref={localVideo} autoPlay></video> 
-      <h1>Their Video</h1>
-      <video ref={externalVideo} autoPlay></video> 
+      <h2 id="callNotification"></h2>
+      <Button variant="contained" color="primary" onClick={createOffer}>Call</Button>
+      <Button variant="contained" color="secondary" onClick={createAnswer}>Answer</Button>
       
-      <br></br><br></br><br></br>
-
-      <button onClick={createOffer}>OFFER</button>
-      <button onClick={createAnswer}>ANSWER</button>
-      <div>
-        <h2>Please paste Peer SDP or Candidate JSON below.</h2>
-        <textarea id="jsonPasteBox" placeholder="Paste JSON here." input="text"/>
-      </div>
-
-      <br></br><br></br><br></br>
+      <br></br><br></br>
 
     </div>
   );

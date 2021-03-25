@@ -6,16 +6,11 @@ const socket = require("socket.io")
 const io = socket(server) 
 const port = 3000
 
-// Page created by the server (in the '/views' folder)
-// (might change from ejs to JSX/react? or send data to a certain page)
-// https://github.com/reactjs/express-react-views
-// app.set("view engine", "ejs")
-
 // Javascript + css folder
 app.use(express.static(__dirname + "/build/"))  
 
 //Redirects the user the root "/" so there are no navigation errors.
-app.get('/', (req, res, next) => {
+app.get('/', (res) => {
     res.sendFile(__dirname + '/build/index.html')
 })
 
