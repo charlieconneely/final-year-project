@@ -2,7 +2,7 @@ import React from 'react';
 import Canvas from '../Canvas/canvas';
 import VideoChat from '../Videochat/videochat';
 
-const Home = () => {
+const Room = () => {
   return (
     <div>
       <Canvas/>
@@ -11,4 +11,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default Room;
