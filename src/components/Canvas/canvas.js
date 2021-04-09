@@ -6,7 +6,7 @@ import DrawingBoard from './drawingBoard'
 import ToolBar from './toolbar'
 import './canvas.css' 
 
-function Canvas() {
+function Canvas(props) {
 
   const [isDrawing, setIsDrawing] = useState(false)
   const [shape, setShape] = useState("Line")
@@ -16,34 +16,25 @@ function Canvas() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [textSize, setTextSize] = useState(20)
   const [elements, setElements] = useLocalStorage("elements", [])
-  const [yourID, setYourID] = useLocalStorage('userID', '')
-
-  const socketRef = useRef()
 
   useEffect(() => {
-    if (yourID === "") {     
-      setYourID(uuid)
-    }
-
-    socketRef.current = io.connect("/")
-
-    socketRef.current.on("your id", id => {
-      console.log("The Socket ID: " + id)
+    props.socket.on("your id", id => {
+      console.log("The Socket ID (inside canvas): " + id)
     })
   
-    socketRef.current.on("canvasState", cState => {
+    props.socket.on("canvasState", cState => {
       if (!inControl) setElements(cState.body);
     })
   
-    socketRef.current.on("control switch", id => {   
-      if (id === yourID) {
+    props.socket.on("control switch", id => {   
+      if (id === props.propsUserID) {
         setControl(true);
       } else {
         setControl(false);
       }
     })
   
-    socketRef.current.on("user-diconnected", () => {
+    props.socket.on("user-diconnected", () => {
       console.log("User disconnected")
     })
 
@@ -60,18 +51,18 @@ function Canvas() {
 
   // called from toolBar component
   const switchControl = () => {   
-    socketRef.current.emit("take control", yourID)
+    props.socket.emit("take control", props.propsUserID)
   }
 
   const sendCanvas = (c) => {
-    socketRef.current.emit("send canvas state", c);
+    props.socket.emit("send canvas state", c);
   }
 
   return (
     <div>
       <DrawingBoard propsInControl={inControl} propsTextSize={textSize}
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
-          id={yourID} propsColour={colour} propsLineWidth={lineWidth}
+          id={props.propsUserID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
           propsShape={shape} winWidth={windowWidth} propsSendCanvas={sendCanvas} />
 
@@ -79,7 +70,7 @@ function Canvas() {
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
             switchControl={switchControl} propsSendCanvas={sendCanvas}
-            id={yourID} setPropsLineWidth={setLineWidth} 
+            id={props.propsUserID} setPropsLineWidth={setLineWidth} 
             propsTextSize={textSize} setPropsTextSize={setTextSize}/>
     </div>
   );

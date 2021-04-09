@@ -1,14 +1,27 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import Canvas from '../Canvas/canvas';
+import uuid from 'react-uuid'
 import VideoChat from '../Videochat/videochat';
+import useLocalStorage from '../../hooks/useLocalStorage'
+import SocketContext from '../../socketContext'
 
-const Room = (props) => {
-  const id = props.match.params.roomID;
-  console.log("ID (inside Room): " + id);
+const Room = () => {
+  const [yourID, setYourID] = useLocalStorage('userID', '')
+
+  useEffect(() => {
+    if (yourID === "") {     
+      setYourID(uuid)
+    }
+  }, [])  
+
   return (
     <div>
-      <Canvas/>
-      <VideoChat/>
+      <SocketContext.Consumer>
+        { socket => <Canvas propsUserID={yourID} socket={socket}/> }
+      </SocketContext.Consumer>
+      <SocketContext.Consumer>
+        { socket => <VideoChat socket={socket}/> }
+      </SocketContext.Consumer>
     </div>
   );
 }

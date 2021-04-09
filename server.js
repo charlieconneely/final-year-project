@@ -10,15 +10,9 @@ const port = 3000
 app.use(express.static(__dirname + "/build/"))  
 
 //Redirects the user the root "/" so there are no navigation errors.
-app.get('/', (res) => {
+app.get('/*', (req, res) => {
     res.sendFile(__dirname + '/build/index.html')
 })
-
-//Sockets are listening to the server+port
-//socket.listen(server)
-
-//Setting the socket transport URL connection for Peers
-//const peers = io.of('/webrtcPeer')
 
 //List of all Peer connections to sockets
 let peerConnections = new Map()
@@ -30,6 +24,17 @@ io.on('connection', (socket) => {
     console.log("VIDEO SIDE OF THINGS:",socket.id);
     socket.emit('connection-success', { success: socket.id})
     peerConnections.set(socket.id, socket)
+
+
+    socket.on('join-room', (roomID, userID) => {
+        socket.join(roomID)
+        socket.to(roomID).broadcast.emit('user-connected', userID)
+        
+        socket.on('disconnect', () => {
+            socket.to(roomID).broadcast.emit('user-disconnected', userID)
+        })
+    })
+
 
     // Event listener for 'offerOrAnswer'.
     // Loops through each of the keys + values within the peerConnections Map

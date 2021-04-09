@@ -10,25 +10,25 @@ function VideoChat(props) {
   // (which is hidden when developing a functional hook instead of a react class component). 
   const localVideo = React.createRef()
   const externalVideo = React.createRef()
-  const socket = useRef()
+  //const socket = useRef()
 
   useEffect(() => {
 
-    socket.current = io.connect("/")
+    //socket.current = io.connect("/")
 
     // Socket event listeners that activate functions for connection success, 
     // offerOrAnswer, and adding a candidate.
-    socket.current.on('connection-success', (success) => {
+    props.socket.on('connection-success', (success) => {
       console.log(success)
     })
-    socket.current.on('offerOrAnswer', (sdp) => {
+    props.socket.on('offerOrAnswer', (sdp) => {
       // Create a notification that comes on screen here
       // that notifies the user that they are being called.
       document.getElementById("callNotification").textContent = "You are being called! Click answer to accept."
       console.log("OFFER OR ANSWER CREATED")
       peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
     })
-    socket.current.on('candidate', (candidate) => {
+    props.socket.on('candidate', (candidate) => {
       peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
     })
   }, [])
@@ -48,8 +48,8 @@ function VideoChat(props) {
   // that takes in a socket identifier and payload,
   // and send the payload and socketID to the peer.
   const sendToPeer = (messageType, payload) => {
-    socket.current.emit(messageType, {
-      socketID: socket.current.id,    
+    props.socket.emit(messageType, {
+      socketID: props.socket.id,    
       payload
     })
   }

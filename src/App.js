@@ -4,21 +4,27 @@ import VideoChat from './components/Videochat/videochat';
 import Canvas from './components/Canvas/canvas';
 import Room from './components/Pages/room';
 import Landing from './components/Pages/landing';
+import SocketContext from './socketContext'
+import io from 'socket.io-client'
+
+const socket = io.connect('/')
 
 function App() {
   return (
-    <div>
-      <BrowserRouter>
-        <div className="App">
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route path="/room/:roomID" component={Room}/>
-            <Route path="/canvas" component={Canvas} />
-            <Route path="/videochat" component={VideoChat} />
-          </Switch>
-        </div>
-      </BrowserRouter>
-    </div>
+    <SocketContext.Provider value={socket}>
+      <div>
+        <BrowserRouter>
+          <div className="App">
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/room" component={Room}/>
+              <Route path="/canvas" component={Canvas} />
+              <Route path="/videochat" component={VideoChat} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+      </div>
+    </SocketContext.Provider>
   );
 }
 
