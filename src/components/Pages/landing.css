@@ -2,17 +2,41 @@
     height: 800px;
     justify-content: center;
     align-items: center;
-    background-color: lightcyan;
+    background-color: #C9F4C8;
 }
 
 .option {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px;
+    height: 120px;
+    background-color: #ffffff;
+}
+
+.heading {
+    padding-top: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;    
+}
+
+.authors {
+    padding-bottom: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; 
+}
+
+h2, p {
+    font-family: monospace;
 }
 
 h2 {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 2rem;
+    font-size: 4rem;
+}
+
+p {
+    font-size: 0.9rem;
 }
