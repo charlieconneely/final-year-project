@@ -7,5 +7,15 @@
 }
 
 .rows .row {
-    display: inline-flex;
+    text-align: center;
+    display: inline-block;
+}
+
+.controlsBox {
+    background-color: white;
+    border: 3px solid black;
+    
+    margin: 1%;
+    margin-left: 40%;
+    margin-right: 40%;
 }

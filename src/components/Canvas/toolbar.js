@@ -98,15 +98,13 @@ function ToolBar(props) {
 
 
     return(
-        <div className='rows'>
+        <div className='rows' class="controlsBox">
             <div>
                 <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
             </div>
-            <div className='row'>
+
                 <DesignControls setPropsColour={setPropsColour} isDisabled={isDisabled}
-                     setPropsLineWidth={setPropsLineWidth}/>
-            </div>
-            <div className='row'>
+                setPropsLineWidth={setPropsLineWidth}/>
                 <Radio checked={props.propsShape==='Line'} name="Choice"
                 onChange={changeShape} value="Line"
                 defaultChecked disabled={isDisabled} color="default"
@@ -123,7 +121,6 @@ function ToolBar(props) {
                 onChange={changeShape} value="Text" color="default"
                 disabled={isDisabled}
                 />Text &nbsp;
-            </div>
             {textInput}
             <div>
                 <Button onClick={e => undo(e)} disabled={isDisabled}>Undo</Button>

@@ -21,17 +21,13 @@ function DesignControls (props) {
     return (
         <div className='rows'>
             <div className='row'>
-                <Grid className={styles.root}>
-                    <Typography  gutterBottom>
-                            Line width
-                    </Typography>
-                    <Slider value={lineWidth} onChange={handleLineWidthChange}
-                                aria-labelledby="line-slider" disabled={props.isDisabled}
-                                min={0.5} max={5}/>
-                </Grid>
-            </div>
+                <Typography  gutterBottom>
+                        Line width
+                </Typography>
+                <Slider value={lineWidth} onChange={handleLineWidthChange}
+                            aria-labelledby="line-slider" disabled={props.isDisabled}
+                            min={0.5} max={5}/>
 
-            <div className='row'>
                 <FormControl variant="outlined" className={styles.formControl} disabled={props.isDisabled}>
                     <InputLabel>Colour</InputLabel> 
                     <Select

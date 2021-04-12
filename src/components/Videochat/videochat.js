@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
+import './videoStyler.css'
 
 function VideoChat(props) {
 
@@ -133,7 +134,7 @@ function VideoChat(props) {
     .catch(mediaFailure)
 
   return ( 
-    <div>
+    <div class="videoContainer">
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <h1>My vid</h1>
@@ -143,13 +144,20 @@ function VideoChat(props) {
           <h1>Their vid</h1>
           <video ref={externalVideo} autoPlay></video> 
         </Grid>
+
+        <Grid item xs={12}>
+          <h2 id="callNotification"></h2>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Button variant="outlined" color="primary" onClick={createOffer}>Call</Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button variant="outlined" color="secondary" onClick={createAnswer}>Answer</Button>
+        </Grid>        
       </Grid>
 
-      <h2 id="callNotification"></h2>
-      <Button variant="contained" color="primary" onClick={createOffer}>Call</Button>
-      <Button variant="contained" color="secondary" onClick={createAnswer}>Answer</Button>
-      
-      <br></br><br></br>
+      <br/><br/>
 
     </div>
   );

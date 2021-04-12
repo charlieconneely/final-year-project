@@ -60,18 +60,19 @@ function Canvas(props) {
 
   return (
     <div>
-      <DrawingBoard propsInControl={inControl} propsTextSize={textSize}
-          isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
-          id={props.propsUserID} propsColour={colour} propsLineWidth={lineWidth}
-          propsElements={elements} setPropsElements={setElements}
-          propsShape={shape} winWidth={windowWidth} propsSendCanvas={sendCanvas} />
-
       <ToolBar propsShape={shape} setPropsShape={setShape} setPropsColour={setColour}
             propsElements={elements} setPropsElements={setElements}
             propsInControl={inControl} setPropsControl={setControl} 
             switchControl={switchControl} propsSendCanvas={sendCanvas}
             id={props.propsUserID} setPropsLineWidth={setLineWidth} 
             propsTextSize={textSize} setPropsTextSize={setTextSize}/>
+      <DrawingBoard propsInControl={inControl} propsTextSize={textSize}
+          isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
+          id={props.propsUserID} propsColour={colour} propsLineWidth={lineWidth}
+          propsElements={elements} setPropsElements={setElements}
+          propsShape={shape} winWidth={windowWidth} propsSendCanvas={sendCanvas} />
+
+
     </div>
   );
 }

@@ -1,42 +1,27 @@
-.container {
-    height: 800px;
-    justify-content: center;
-    align-items: center;
-    background-color: #C9F4C8;
+body {
+    height: 95vh;
+    background-image: linear-gradient(to right, #1400ff , #01e6ff);
+    padding: 0.5%;
 }
 
-.option {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 120px;
-    background-color: #ffffff;
+.backgroundLogo {
+    background-image: url("../../logo.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 98vh;
 }
 
-.heading {
-    padding-top: 5%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;    
+#enterButton {
+    position: fixed;
+    bottom: 20vh;
+    right: 40vw;
+    left: 40vw;
 }
 
-.authors {
-    padding-bottom: 5%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px; 
-}
-
-h2, p {
-    font-family: monospace;
-}
-
-h2 {
-    font-size: 4rem;
-}
-
-p {
-    font-size: 0.9rem;
+#creditsSection {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding-right: 1%;
 }

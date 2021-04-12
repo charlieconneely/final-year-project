@@ -4,6 +4,8 @@ import uuid from 'react-uuid'
 import VideoChat from '../Videochat/videochat';
 import useLocalStorage from '../../hooks/useLocalStorage'
 import SocketContext from '../../socketContext'
+import './landing.css'
+
 
 const Room = () => {
   const [yourID, setYourID] = useLocalStorage('userID', '')
@@ -15,14 +17,14 @@ const Room = () => {
   }, [])  
 
   return (
-    <div>
-      <SocketContext.Consumer>
-        { socket => <Canvas propsUserID={yourID} socket={socket}/> }
-      </SocketContext.Consumer>
+    <body>      
       <SocketContext.Consumer>
         { socket => <VideoChat socket={socket}/> }
       </SocketContext.Consumer>
-    </div>
+      <SocketContext.Consumer>
+        { socket => <Canvas propsUserID={yourID} socket={socket}/> }
+      </SocketContext.Consumer>
+    </body>
   );
 }
 

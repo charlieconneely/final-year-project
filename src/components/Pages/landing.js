@@ -11,16 +11,11 @@ const LandingPage = (props) => {
     }
 
     return (
-        <div className='container'>
-            <div className='heading'>
-                <h2>Welcome to Videsign</h2> 
+        <div class="backgroundLogo">
+            <div id="enterButton">
+                <Button onClick={enterRoom} variant='outlined' color="primary" size='large'>Enter Room</Button>
             </div>
-            <div className='authors'>
-                <p>Created by: Charlie Conneely & Connor Brookfield</p>
-            </div>
-            <div className='option'>
-                <Button onClick={enterRoom} variant='outlined' size='large'>Enter Room</Button>
-            </div>
+            <p id="creditsSection">Created by: <a href="https://github.com/ConnorBrookfield">Connor Brookfield</a> and <a href="https://github.com/charlieconneely">Charlie Conneely</a></p>
         </div>
     )
 }

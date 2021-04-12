@@ -1,16 +1,11 @@
-#video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 300px);
-    grid-auto-rows: 300px;
-}
 
 video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 80%;
+    height: 80%;
 }
 
-#green {
-    text-align: center;
-    color: green;
+.videoContainer {
+    background-color: white;
+    border: 3px solid black;
+    margin: 1%;
 }
