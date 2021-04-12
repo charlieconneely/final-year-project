@@ -102,7 +102,6 @@ function ToolBar(props) {
             <div>
                 <Button onClick={e => switchControl(e)}>{controlButtonMessage}</Button>
             </div>
-
                 <DesignControls setPropsColour={setPropsColour} isDisabled={isDisabled}
                 setPropsLineWidth={setPropsLineWidth}/>
                 <Radio checked={props.propsShape==='Line'} name="Choice"

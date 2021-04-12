@@ -71,8 +71,6 @@ function Canvas(props) {
           id={props.propsUserID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
           propsShape={shape} winWidth={windowWidth} propsSendCanvas={sendCanvas} />
-
-
     </div>
   );
 }
