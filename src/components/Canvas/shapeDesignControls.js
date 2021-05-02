@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import './canvas.css'
 import useStyles from './useStyles'
-import {FormControl, InputLabel, Select, MenuItem, Typography, Grid, Slider} from '@material-ui/core'
+import { FormControl, InputLabel, Select, MenuItem, Typography, Slider } from '@material-ui/core'
 
 function DesignControls (props) {
     const [lineWidth, setLineWidth] = useState(1)

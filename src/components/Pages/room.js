@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect } from 'react';
 import Canvas from '../Canvas/canvas';
 import uuid from 'react-uuid'
 import VideoChat from '../Videochat/videochat';

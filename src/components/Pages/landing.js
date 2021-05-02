@@ -1,6 +1,5 @@
 import React from 'react'
-import { Button, TextField } from '@material-ui/core'
-import uuid from 'react-uuid'
+import { Button } from '@material-ui/core'
 import './landing.css'
 
 const LandingPage = (props) => {

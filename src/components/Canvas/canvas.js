@@ -1,6 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
-import uuid from 'react-uuid'
-import io from 'socket.io-client'
+import React, { useState, useEffect } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import DrawingBoard from './drawingBoard'
 import ToolBar from './toolbar'
@@ -34,7 +32,7 @@ function Canvas(props) {
       }
     })
   
-    props.socket.on("user-diconnected", () => {
+    props.socket.on("user-disconnected", () => {
       console.log("User disconnected")
     })
 
