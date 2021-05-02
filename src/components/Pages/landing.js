@@ -5,7 +5,6 @@ import './landing.css'
 const LandingPage = (props) => {
 
     function enterRoom() {
-        //const id = uuid();
         props.history.push(`/room`);
     }
 
