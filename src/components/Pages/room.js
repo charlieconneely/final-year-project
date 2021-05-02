@@ -21,7 +21,7 @@ const Room = () => {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])  
+  })  
 
   const handleResize = () => {
     setWindowWidth(window.innerWidth)
