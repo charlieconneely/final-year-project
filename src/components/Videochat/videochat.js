@@ -139,7 +139,7 @@ function VideoChat(props) {
         </Grid>
 
         <Grid item xs={12}>
-          <h2 id="callNotification"></h2>
+          <h2 id="callNotification"> </h2>
         </Grid>
 
         <Grid item xs={6}>
