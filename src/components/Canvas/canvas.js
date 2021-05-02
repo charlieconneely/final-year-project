@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import DrawingBoard from './drawingBoard'
 import ToolBar from './toolbar'
@@ -11,41 +11,28 @@ function Canvas(props) {
   const [colour, setColour] = useState("") 
   const [lineWidth, setLineWidth] = useState(1)
   const [inControl, setControl] = useState(false)
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [textSize, setTextSize] = useState(20)
   const [elements, setElements] = useLocalStorage("elements", [])
 
-  useEffect(() => {
-    props.socket.on("your id", id => {
-      console.log("The Socket ID (inside canvas): " + id)
-    })
-  
-    props.socket.on("canvasState", cState => {
-      if (!inControl) setElements(cState.body);
-    })
-  
-    props.socket.on("control switch", id => {   
-      if (id === props.propsUserID) {
-        setControl(true);
-      } else {
-        setControl(false);
-      }
-    })
-  
-    props.socket.on("user-disconnected", () => {
-      console.log("User disconnected")
-    })
+  props.socket.on("your id", id => {
+    console.log("The Socket ID (inside canvas): " + id)
+  })
 
-    window.addEventListener('resize', handleResize)
+  props.socket.on("canvasState", cState => {
+    if (!inControl) setElements(cState.body);
+  })
 
-    return () => {
-      window.removeEventListener('resize', handleResize)
+  props.socket.on("control switch", id => {   
+    if (id === props.propsUserID) {
+      setControl(true);
+    } else {
+      setControl(false);
     }
-  }, [])
+  })
 
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth)
-  }
+  props.socket.on("user-disconnected", () => {
+    console.log("User disconnected")
+  })
 
   // called from toolBar component
   const switchControl = () => {   
@@ -68,7 +55,7 @@ function Canvas(props) {
           isPropsDrawing={isDrawing} setIsPropsDrawing={setIsDrawing}
           id={props.propsUserID} propsColour={colour} propsLineWidth={lineWidth}
           propsElements={elements} setPropsElements={setElements}
-          propsShape={shape} winWidth={windowWidth} propsSendCanvas={sendCanvas} />
+          propsShape={shape} winWidth={props.winWidth} propsSendCanvas={sendCanvas} />
     </div>
   );
 }

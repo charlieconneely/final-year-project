@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
 import './videoStyler.css'
@@ -10,28 +10,22 @@ function VideoChat(props) {
   // (which is hidden when developing a functional hook instead of a react class component). 
   const localVideo = React.createRef()
   const externalVideo = React.createRef()
-  //const socket = useRef()
 
-  useEffect(() => {
-
-    //socket.current = io.connect("/")
-
-    // Socket event listeners that activate functions for connection success, 
-    // offerOrAnswer, and adding a candidate.
-    props.socket.on('connection-success', (success) => {
-      console.log(success)
-    })
-    props.socket.on('offerOrAnswer', (sdp) => {
-      // Create a notification that comes on screen here
-      // that notifies the user that they are being called.
-      document.getElementById("callNotification").textContent = "You are being called! Click answer to accept."
-      console.log("OFFER OR ANSWER CREATED")
-      peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
-    })
-    props.socket.on('candidate', (candidate) => {
-      peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
-    })
-  }, [])
+  // Socket event listeners that activate functions for connection success, 
+  // offerOrAnswer, and adding a candidate.
+  props.socket.on('connection-success', (success) => {
+    console.log(success)
+  })
+  props.socket.on('offerOrAnswer', (sdp) => {
+    // Create a notification that comes on screen here
+    // that notifies the user that they are being called.
+    document.getElementById("callNotification").textContent = "You are being called! Click answer to accept."
+    console.log("OFFER OR ANSWER CREATED")
+    peerConnection.setRemoteDescription(new RTCSessionDescription(sdp))
+  })
+  props.socket.on('candidate', (candidate) => {
+    peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+  })
 
   // Creates an RTCPeerConnection object with a list of TURN/STUN servers 
   const peerConnection_config = {
