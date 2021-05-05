@@ -9,14 +9,14 @@ function DrawingBoard (props) {
       var canvas = document.getElementById("canvas");
       var context = canvas.getContext('2d');
       var rc = rough.canvas(canvas)
-      
+
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.lineWidth = 5;
       context.strokeStyle="black";
       context.strokeRect(0, 0, canvas.width, canvas.height);
-      
+
       props.propsElements.forEach(e => {
-        // check if item is a text element 
+        // check if item is a text element
         if (e.hasOwnProperty('type')) {
           context.font = e.size + 'px serif';
           context.fillText(e.val, e.xco, e.yco);
@@ -24,15 +24,15 @@ function DrawingBoard (props) {
         }
         rc.draw(e.roughElement)
       });
-      
-  }, [props.propsElements, props.winWidth]) 
+
+  }, [props.propsElements, props.winWidth])
 
   const handleMouseDown = (event) => {
       var {pageX, pageY} = event;
       var xPos = pageX - document.getElementById('canvas').offsetLeft;
       var yPos = pageY - document.getElementById('canvas').offsetTop;
 
-      // if text is selected - add textElement obj to state with value from input field 
+      // if text is selected - add textElement obj to state with value from input field
       if (props.propsShape === "Text") {
         var textInputElement = {
           type:"Text",
@@ -77,21 +77,26 @@ function DrawingBoard (props) {
           id: props.id
       }
       props.propsSendCanvas(canvasObject)
-  } 
+  }
 
-  // if player is in control - return canvas with event handling 
-  const canvasItem = props.propsInControl ? 
+  let unsupportedMessage = "Your browser does not support our features."
+  // if player is in control - return canvas with event handling
+  const canvasItem = props.propsInControl ?
   <canvas id="canvas"
     width={window.innerWidth - 100}
     height={window.innerHeight - 200}
     onMouseDown={e => handleMouseDown(e)}
     onMouseMove={e => handleMouseMove(e)}
-    onMouseUp={handleMouseUp}></canvas> 
+    onMouseUp={handleMouseUp}>
+      {unsupportedMessage}
+    </canvas>
     // else - return non-interactive canvas
-    : 
+    :
     <canvas id="canvas"
       width={window.innerWidth - 100}
-      height={window.innerHeight - 200}></canvas>
+      height={window.innerHeight - 200}>
+      {unsupportedMessage}
+    </canvas>
 
   return (
       <div>
