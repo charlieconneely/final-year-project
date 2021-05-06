@@ -79,22 +79,24 @@ function DrawingBoard (props) {
       props.propsSendCanvas(canvasObject)
   }
 
-  let unsupportedMessage = "Your browser does not support our features."
+  let unsupportedMessage = "Your browser does not support our features.";
+  let canvasWidth = window.innerWidth - 100;
+  let canvasHeight = window.innerHeight - 200;
   // if player is in control - return canvas with event handling
   const canvasItem = props.propsInControl ?
-  <canvas id="canvas"
-    width={window.innerWidth - 100}
-    height={window.innerHeight - 200}
-    onMouseDown={e => handleMouseDown(e)}
-    onMouseMove={e => handleMouseMove(e)}
-    onMouseUp={handleMouseUp}>
-      {unsupportedMessage}
+    <canvas id="canvas"
+      width={canvasWidth}
+      height={canvasHeight}
+      onMouseDown={e => handleMouseDown(e)}
+      onMouseMove={e => handleMouseMove(e)}
+      onMouseUp={handleMouseUp}>
+        {unsupportedMessage}
     </canvas>
     // else - return non-interactive canvas
     :
     <canvas id="canvas"
-      width={window.innerWidth - 100}
-      height={window.innerHeight - 200}>
+      width={canvasWidth}
+      height={canvasHeight}>
       {unsupportedMessage}
     </canvas>
 
