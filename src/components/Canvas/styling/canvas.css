@@ -1,21 +1,21 @@
 #canvas {
-    background-color: rgb(173, 180, 178);
+  background-color: #adb4b2;
 }
 
 .line-slider {
-    width: 50;
+  width: 50;
 }
 
 .rows .row {
-    text-align: center;
-    display: inline-block;
+  text-align: center;
+  display: inline-block;
 }
 
 .controlsBox {
-    background-color: white;
-    border: 3px solid black;
-    
-    margin: 1%;
-    margin-left: 40%;
-    margin-right: 40%;
+  background-color: white;
+  border: 3px solid black;
+  margin: 1%;
+  margin-left: 40%;
+  margin-right: 40%;
 }
+/*# sourceMappingURL=canvas.css.map */

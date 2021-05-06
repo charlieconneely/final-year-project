@@ -1,0 +1,23 @@
+$canvasBgColour: rgb(173, 180, 178);
+
+#canvas {
+    background-color: $canvasBgColour;
+}
+
+.line-slider {
+    width: 50;
+}
+
+.rows .row {
+    text-align: center;
+    display: inline-block;
+}
+
+.controlsBox {
+    background-color: white;
+    border: 3px solid black;
+    
+    margin: 1%;
+    margin-left: 40%;
+    margin-right: 40%;
+}
