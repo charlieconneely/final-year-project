@@ -1,0 +1,31 @@
+$bgImage: linear-gradient(to right, #1400ff , #01e6ff);
+
+@mixin positioning($pos, $bottom, $right, $left) {
+    position: $pos;
+    bottom: $bottom;
+    right: $right;
+    left: $left;
+}
+
+body {
+    height: 95vh;
+    background-image: $bgImage;
+    padding: 0.5%;
+}
+
+.backgroundLogo {
+    background-image: url("../../logo.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 98vh;
+}
+ 
+#enterButton {
+    @include positioning(fixed, 20vh, 40vw, 40vw);
+}
+
+#creditsSection {
+    @include positioning(fixed, 0, 0, none);
+    padding-right: 1%;
+}

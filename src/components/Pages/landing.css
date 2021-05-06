@@ -1,27 +1,30 @@
 body {
-    height: 95vh;
-    background-image: linear-gradient(to right, #1400ff , #01e6ff);
-    padding: 0.5%;
+  height: 95vh;
+  background-image: -webkit-gradient(linear, left top, right top, from(#1400ff), to(#01e6ff));
+  background-image: linear-gradient(to right, #1400ff, #01e6ff);
+  padding: 0.5%;
 }
 
 .backgroundLogo {
-    background-image: url("../../logo.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 98vh;
+  background-image: url("../../logo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 98vh;
 }
 
 #enterButton {
-    position: fixed;
-    bottom: 20vh;
-    right: 40vw;
-    left: 40vw;
+  position: fixed;
+  bottom: 20vh;
+  right: 40vw;
+  left: 40vw;
 }
 
 #creditsSection {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    padding-right: 1%;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: none;
+  padding-right: 1%;
 }
+/*# sourceMappingURL=landing.css.map */
