@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import './landing.css'
+import './styling/landing.css'
 
 const LandingPage = (props) => {
 

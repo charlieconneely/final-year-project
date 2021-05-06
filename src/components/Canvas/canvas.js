@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import DrawingBoard from './drawingBoard'
 import ToolBar from './toolbar'
-import './canvas.css' 
+import './styling/canvas.css' 
 
 function Canvas(props) {
 

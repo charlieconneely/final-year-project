@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import './canvas.css'
+import './styling/canvas.css'
 import useStyles from './useStyles'
 import { FormControl, InputLabel, Select, MenuItem, Typography, Slider } from '@material-ui/core'
 

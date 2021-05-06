@@ -4,7 +4,7 @@ import uuid from 'react-uuid'
 import VideoChat from '../Videochat/videochat'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import SocketContext from '../../socketContext'
-import './landing.css'
+import './styling/landing.css'
 
 
 const Room = () => {

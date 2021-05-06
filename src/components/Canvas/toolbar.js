@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, TextField, Radio, Grid, Typography, Slider } from '@material-ui/core'
 import DesignControls from './shapeDesignControls'
 import useStyles from './useStyles'
-import './canvas.css'
+import './styling/canvas.css'
 
 function ToolBar(props) {
     const textWidth = props.propsTextSize

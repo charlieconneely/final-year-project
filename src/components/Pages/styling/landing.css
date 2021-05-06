@@ -6,7 +6,7 @@ body {
 }
 
 .backgroundLogo {
-  background-image: url("../../logo.png");
+  background-image: url("../../../logo.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

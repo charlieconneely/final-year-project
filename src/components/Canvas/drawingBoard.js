@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 import shapeGenerator from './shapeGenerator'
 import rough from 'roughjs/bundled/rough.esm'
-import './canvas.css'
+import './styling/canvas.css'
 
 function DrawingBoard (props) {
 
