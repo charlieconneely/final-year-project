@@ -131,7 +131,7 @@ function VideoChat(props) {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <h2>You</h2>  
-          <video ref={localVideo} autoPlay></video> 
+          <video ref={localVideo} autoPlay muted></video> 
         </Grid>
         <Grid item xs={6}>
           <h2>Guest</h2>
