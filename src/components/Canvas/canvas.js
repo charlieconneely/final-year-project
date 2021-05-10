@@ -39,8 +39,8 @@ function Canvas(props) {
     props.socket.emit("take control", props.propsUserID)
   }
 
-  const sendCanvas = (c) => {
-    props.socket.emit("send canvas state", c);
+  const sendCanvas = (cState) => {
+    props.socket.emit("send canvas state", cState);
   }
 
   return (
