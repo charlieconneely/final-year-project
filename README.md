@@ -13,11 +13,13 @@ the canvas feature was developed by Charlie Conneely, and the server side aspect
 
 ## Repository contents
 This repository contains several files. Listed below are the non-boiler-plate files, folders and their functions;
-1. ```src``` - Contains the JavaScript/React/CSS/SCSS files responsible for the operation and structure of the React application.
+1. ```/src``` - Contains the JavaScript/React/CSS/SCSS files responsible for the operation and structure of the React application.
 2. ```server.js``` - This JavaScript file is responsible for the server side section of the application.
 3. ```README.md``` - Contains useful information about this repository, and operating the applications/files present.
 4. ```.gitignore``` - This file contains files and folders that don't get uploaded when pushing to this Github repository.
 5. ```Screencast.mp4``` - Video file in which Connor Brookfield discusses the project and demonstrates the compilation, the running of the application, and how the application can be used. Note that in the screencast, the application is run on the same browser instance so the cookies are shared, this results in the toolbox's "Take Control" button being executed on both clients at the same time. When an incognito window or another browser is used, the issue is not apparent. 
+6. ```Dissertation.pdf``` - The dissertation for our final year project.
+7. ```/Dissertation``` - The folder containing all the LaTex files and resources required to create the dissertation. 
 
 ## How to Build, Run and Deploy the application.
 ### To build our React application, you must;
